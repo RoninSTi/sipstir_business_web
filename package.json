@@ -10,10 +10,29 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.10.1",
+    "customize-cra": "^0.9.1",
+    "env-cmd": "^10.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.8",
+    "react-app-rewired": "^2.1.5"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "./node_modules/.bin/env-cmd -e dev react-app-rewired start",
+    "build": "react-app-rewired build",
+    "build:staging": "./node_modules/.bin/env-cmd -e staging react-app-rewired build",
+    "build:prod": "./node_modules/.bin/env-cmd -e prod react-app-rewired build",
+    "lint": "eslint './src/**/*.{js, jsx}' --fix ",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -29,6 +48,16 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./src/**/*.{js,jsx}": [
+      "eslint --fix"
     ]
   }
 }
