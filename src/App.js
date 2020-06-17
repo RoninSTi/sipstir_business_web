@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
 
-function App() {
+import { Provider } from 'react-redux'
+import store from '@redux/store'
+
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+
+import Auth0Provider from '@contexts/auth0-context.component'
+import ProtectedRoute from '@components/protected-route/protected-route.component'
+
+import Dashboard from '@views/dashboard/dashboard.component'
+import Login from '@views/login/login.component'
+
+import '@sass/App.sass'
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Provider store={store}>
+      <Router>
+        <Auth0Provider>
+          <Switch>
+            <Route path='/login'>
+              <Login />
+            </Route>
+            <ProtectedRoute path='/'>
+              <Dashboard />
+            </ProtectedRoute>
+          </Switch>
+        </Auth0Provider>
+      </Router>
+    </Provider>
+  )
 }
 
-export default App;
+export default App

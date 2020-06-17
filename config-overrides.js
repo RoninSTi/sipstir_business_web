@@ -16,6 +16,7 @@ module.exports = override(
     '@sass': path.join(__dirname, 'src/sass'),
     '@services': path.join(__dirname, 'src/services'),
     '@selectors': path.join(__dirname, 'src/redux/selectors'),
+    '@views': path.join(__dirname, 'src/views'),
     '@utils': path.join(__dirname, 'src/utils')
   }),
   ...addBabelPlugins(

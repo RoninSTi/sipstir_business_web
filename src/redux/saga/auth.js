@@ -3,7 +3,7 @@ import { put, takeEvery } from 'redux-saga/effects'
 import { LOGIN_FAIL, LOGIN_SUCCESS, SET_AUTH } from '@actions/types'
 import { loginAction } from '@actions/auth'
 
-function * onLoginFail(action) {
+function onLoginFail(action) {
   if (action.error?.response?.data?.message === 'User doesn\'t exist') {
     const history = action.meta?.previousAction?.history
 
@@ -11,7 +11,7 @@ function * onLoginFail(action) {
   }
 }
 
-function * onLoginSuccess(action) {
+function onLoginSuccess(action) {
   const history = action.meta?.previousAction?.history
 
   if (!history) return
