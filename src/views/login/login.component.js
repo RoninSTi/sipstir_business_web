@@ -7,9 +7,9 @@ import { useAuth0 } from '@contexts/auth0-context.component'
 
 const Login = () => {
   const auth0 = useAuth0()
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  const isValidated = useSelector(state => state.auth.isValidated)
 
-  if (isAuthenticated) return <Redirect to='/' />
+  if (isValidated) return <Redirect to='/' />
 
   return (
     <section className='hero is-primary is-fullheight'>

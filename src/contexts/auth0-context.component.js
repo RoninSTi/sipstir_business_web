@@ -32,15 +32,21 @@ class Auth0Provider extends Component {
       const user = isAuthenticated ? await this.state.auth0Client.getUser() : null
       const token = isAuthenticated ? await this.state.auth0Client.getTokenSilently() : null
 
+      const payload = {
+        isAuthenticated,
+        isLoading: false,
+        history: this.props.history,
+        token,
+        user
+      }
+
+      if (!isAuthenticated) {
+        payload.isValidated = false
+      }
+
       this.props.dispatch({
         type: SET_AUTH,
-        payload: {
-          isAuthenticated,
-          isLoading: false,
-          history: this.props.history,
-          token,
-          user
-        }
+        payload
       })
 
       window.history.replaceState({}, document.title, window.location.pathname)
@@ -66,23 +72,30 @@ class Auth0Provider extends Component {
     const isAuthenticated = await this.state.auth0Client.isAuthenticated()
     const user = isAuthenticated ? await this.state.auth0Client.getUser() : null
     const token = isAuthenticated ? await this.state.auth0Client.getTokenSilently() : null
+    const claims = isAuthenticated ? await this.state.auth0Client.getIdTokenClaims() : null
+
+    const payload = {
+      claims,
+      isAuthenticated,
+      isLoading: false,
+      history: this.props.history,
+      token,
+      user
+    }
+
+    if (!isAuthenticated) {
+      payload.isValidated = false
+    }
 
     this.props.dispatch({
       type: SET_AUTH,
-      payload: {
-        isAuthenticated,
-        isLoading: false,
-        history: this.props.history,
-        token,
-        user
-      }
+      payload
     })
   };
 
   componentDidMount() {
     this.initializeAuth0()
   }
-
 
   render() {
     const { auth0Client } = this.state

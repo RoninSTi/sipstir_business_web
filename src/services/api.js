@@ -5,9 +5,16 @@ const defaultClient = axios.create({
   timeout: 10000
 })
 
+const googlePlaceClient = axios.create({
+  baseURL: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?&key=${process.env.REACT_APP_GOOGLE_PLACE_API_KEY}`
+})
+
 const clients = {
   default: {
     client: defaultClient
+  },
+  googlePlace: {
+    client: googlePlaceClient
   }
 }
 

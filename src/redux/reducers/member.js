@@ -1,23 +1,22 @@
-import { LOGIN_SUCCESS } from '@actions/types'
+import { CREATE_MEMBER_SUCCESS } from '@actions/types'
 
 const initialState = {
-  accounts: [],
-  avatar: '',
   createdAt: '',
   email: '',
   id: '',
-  role: '',
-  username: ''
+  permissions: [],
+  updatedAt: ''
 }
 
 const reducer = (state = initialState, action) => {
   const { payload, type } = action
 
   switch (type) {
-  case LOGIN_SUCCESS:
+  case CREATE_MEMBER_SUCCESS:
     return {
       ...state,
-      ...payload.data
+      ...payload.data,
+      permissions: JSON.parse(payload.data.permissions)
     }
   default:
     return state

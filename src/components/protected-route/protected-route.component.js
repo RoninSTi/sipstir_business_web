@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
 
 const ProtectedRoute = ({ path, children }) => {
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  const isValidated = useSelector(state => state.auth.isValidated)
 
-  if (!isAuthenticated) return <Redirect to='/login' />
+  if (!isValidated) return <Redirect to='/login' />
 
   return <Route path={path}>{children}</Route>
 }
