@@ -25,7 +25,7 @@ const RewardDetail = () => {
     } else {
       dispatch({ type: POPULATE_CREATE_REWARD_FORM, payload: { ...reward } })
     }
-  }, [dispatch, reward, rewardId, token])
+  }, [accountId, dispatch, reward, rewardId, token])
 
   const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === UPDATE_REWARD))
 

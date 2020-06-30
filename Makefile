@@ -1,5 +1,5 @@
 set-staging-environment:
-	heroku config:set API_URL=https://pure-temple-78419.herokuapp.com/ && \
+	heroku config:set REACT_APP_API_URL=https://pure-temple-78419.herokuapp.com/ && \
 	heroku config:set REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_51GxGm9BLR3Udnav95RYeK8EZJQRh868kS7hSrxCAHMJ6yoyXe3VyImHbEyGO9rGkxhzk6xjABBNTcLGzZ7n4Rnbj00mEndhfLk && \
 	heroku config:set REACT_APP_AUTH0_AUDIENCE=https://api.barsnap.com && \
 	heroku config:set REACT_APP_AUTH0_DOMAIN=dev-f4i21swa.us.auth0.com && \
