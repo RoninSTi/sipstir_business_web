@@ -86,7 +86,7 @@ const AccountInfo = () => {
             isLoading={isAddingMember}
             onAdd={handleOnAdd}
           />
-          {account.members.length > 0 &&
+          {account?.members.length > 0 &&
             <div className='table-container'>
               <table className='table is-fullwidth'>
                 <thead>
@@ -106,7 +106,6 @@ const AccountInfo = () => {
                 </tbody>
               </table>
             </div>}
-
         </div>
       </div>
     </div>
