@@ -20,23 +20,22 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
 
 const App = () => {
   return (
-    <div>hi</div>
-    // <Provider store={store}>
-    //   <Elements stripe={stripePromise}>
-    //     <Router>
-    //       <Auth0Provider>
-    //         <Switch>
-    //           <Route path='/login'>
-    //             <Login />
-    //           </Route>
-    //           <ProtectedRoute path='/'>
-    //             <Dashboard />
-    //           </ProtectedRoute>
-    //         </Switch>
-    //       </Auth0Provider>
-    //     </Router>
-    //   </Elements>
-    // </Provider>
+    <Provider store={store}>
+      <Elements stripe={stripePromise}>
+        <Router>
+          <Auth0Provider>
+            <Switch>
+              <Route path='/login'>
+                <Login />
+              </Route>
+              <ProtectedRoute path='/'>
+                <Dashboard />
+              </ProtectedRoute>
+            </Switch>
+          </Auth0Provider>
+        </Router>
+      </Elements>
+    </Provider>
   )
 }
 
