@@ -3,25 +3,22 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CREATE_ACCOUNT, CREATE_ACCOUNT_ADD_MEMBER, CREATE_ACCOUNT_DELETE_MEMBER, CREATE_ACCOUNT_UPDATE_FORM } from '@actions/types'
 import { createAccountAction } from '@actions/account'
-import { validateEmail } from '@utils/stringTest'
 
-import InputTag from '@components/input-tag/input-tag.component'
 import GooglePlaceSelect from '@components/google-place-select/google-place-select.component'
+import MemberInput from '@components/member-input/member-input.component'
+import TagList from '@components/tag-list/tag-list.component'
 
 const AccountCreate = () => {
   const dispatch = useDispatch()
 
-  const name = useSelector(state => state.createAccount.name)
-  const members = useSelector(state => state.createAccount.members)
+  const { email, members, name, placeId } = useSelector(state => state.createAccount)
   const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === CREATE_ACCOUNT))
   const token = useSelector(state => state.auth.token)
-  const placeId = useSelector(state => state.createAccount.placeId)
 
-  const handleAddition = tag => {
-    console.log({ tag })
+  const handleAddition = ({ email, role }) => {
     dispatch({
       type: CREATE_ACCOUNT_ADD_MEMBER,
-      payload: tag
+      payload: { email, role }
     })
   }
 
@@ -46,11 +43,7 @@ const AccountCreate = () => {
   const handleSubmit = e => {
     e.preventDefault()
 
-    dispatch(createAccountAction({ name, members, placeId, token }))
-  }
-
-  const handleValidate = tag => {
-    return validateEmail(tag)
+    dispatch(createAccountAction({ email, name, members, placeId, token }))
   }
 
   return (
@@ -68,18 +61,25 @@ const AccountCreate = () => {
           />
         </div>
       </div>
-      <GooglePlaceSelect />
       <div className='field'>
-        <label className='label'>Members</label>
+        <label className='label'>Business email</label>
         <div className='control'>
-          <InputTag
-            handleAddition={handleAddition}
-            handleDelete={handleDelete}
-            handleValidate={handleValidate}
-            tags={members}
+          <input
+            className='input'
+            name='email'
+            onChange={handleInputChange}
+            placeholder='e.g. awesome_business@aol.com'
+            type='email'
+            value={email}
           />
         </div>
       </div>
+      <GooglePlaceSelect />
+      <MemberInput onAdd={handleAddition} />
+      <TagList
+        items={members.map(member => ({ text: member.email }))}
+        onDelete={handleDelete}
+      />
       <div className='field'>
         <div className='control'>
           <button

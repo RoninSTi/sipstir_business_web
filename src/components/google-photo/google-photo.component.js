@@ -14,7 +14,7 @@ const GooglePhoto = ({ photoreference, maxheight, maxwidth }) => {
   }
 
   return <img
-    alt='google place photo'
+    alt='google place'
     src={url}
   />
 }

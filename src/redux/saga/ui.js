@@ -16,6 +16,30 @@ function * addLoading({ loadingType, meta }) {
   })
 }
 
+function * checkLoading(action) {
+  const { setLoading } = action.payload
+
+  if (setLoading) {
+    yield onUpdateLoading({
+      payload: {
+        loadingAction: 'set',
+        loadingType: action.type,
+        meta: setLoading.meta
+      }
+    })
+  }
+
+  if (action.meta?.previousAction) {
+    yield onUpdateLoading({
+      payload: {
+        loadingAction: 'unset',
+        loadingType: action.meta?.previousAction?.type,
+        meta: action.meta?.previousAction.payload.setLoading?.meta
+      }
+    })
+  }
+}
+
 function * removeLoading({ loadingType, meta }) {
   const loaders = yield select(getLoaders)
 
@@ -28,6 +52,7 @@ function * removeLoading({ loadingType, meta }) {
 }
 
 function * onUpdateLoading(action) {
+  console.log({ action })
   const {
     payload: {
       loadingAction,
@@ -49,5 +74,7 @@ function * onUpdateLoading(action) {
 };
 
 export function * watchUI() {
+  yield takeEvery(action => action.payload?.setLoading, checkLoading)
+  yield takeEvery(action => action.meta?.previousAction, checkLoading)
   yield takeEvery(UPDATE_LOADING, onUpdateLoading)
 };

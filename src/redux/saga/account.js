@@ -1,38 +1,39 @@
 import { put, takeEvery, select } from 'redux-saga/effects'
 
-import { CREATE_ACCOUNT, CREATE_ACCOUNT_SUCCESS, CREATE_USER_SUCCESS, FETCH_MEMBER_ACCOUNTS_SUCCESS, SET_ACTIVE_ACCOUNT, UPDATE_LOADING } from '@actions/types'
+import {
+  ADD_MEMBER_SUCCESS,
+  CREATE_USER_SUCCESS,
+  FETCH_MEMBER_ACCOUNTS_SUCCESS,
+  SET_ACTIVE_ACCOUNT,
+  UPDATE_MEMBER_SUCCESS
+} from '@actions/types'
 import { getMemberAccountsAction } from '@actions/account'
+import { DELETE_MEMBER_SUCCESS } from '../actions/types'
 
 const getActiveAccount = state => state.account.activeAccount
 const getMemberId = state => state.member.id
 const getToken = state => state.auth.token
 
-function * onCreateAccount() {
-  yield put({
-    type: UPDATE_LOADING,
-    payload: {
-      loadingAction: 'set',
-      loadingType: CREATE_ACCOUNT,
-      meta: null
-    }
-  })
-}
-
-function * onCreateAccountSuccess() {
-  yield put({
-    type: UPDATE_LOADING,
-    payload: {
-      loadingAction: 'unset',
-      loadingType: CREATE_ACCOUNT,
-      meta: null
-    }
-  })
-}
-
-function * onCreateUserSuccess() {
+function * fetchAccounts() {
   const memberId = yield select(getMemberId)
   const token = yield select(getToken)
   yield put(getMemberAccountsAction({ memberId, token }))
+}
+
+function * onAddMemberSuccess() {
+  yield fetchAccounts()
+}
+
+function * onDeleteMemberSuccess() {
+  yield fetchAccounts()
+}
+
+function * onUpdateMemberSuccess() {
+  yield fetchAccounts()
+}
+
+function * onCreateUserSuccess() {
+  yield fetchAccounts()
 }
 
 function * onFetchMemberAccountsSuccess(action) {
@@ -58,8 +59,9 @@ function * onFetchMemberAccountsSuccess(action) {
 }
 
 export function * watchAccount() {
-  yield takeEvery(CREATE_ACCOUNT, onCreateAccount)
-  yield takeEvery(CREATE_ACCOUNT_SUCCESS, onCreateAccountSuccess)
+  yield takeEvery(ADD_MEMBER_SUCCESS, onAddMemberSuccess)
   yield takeEvery(CREATE_USER_SUCCESS, onCreateUserSuccess)
+  yield takeEvery(DELETE_MEMBER_SUCCESS, onDeleteMemberSuccess)
   yield takeEvery(FETCH_MEMBER_ACCOUNTS_SUCCESS, onFetchMemberAccountsSuccess)
+  yield takeEvery(UPDATE_MEMBER_SUCCESS, onUpdateMemberSuccess)
 };

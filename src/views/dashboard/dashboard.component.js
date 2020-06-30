@@ -2,9 +2,13 @@ import React from 'react'
 
 import { Route, Switch } from 'react-router-dom'
 
+import AccountCreate from '@components/account-create/account-create.component'
 import Accounts from '@components/accounts/accounts.component'
 import Navbar from '@components/navbar/navbar.component'
-import AccountCreate from '@components/account-create/account-create.component'
+import Rewards from '@components/rewards/rewards.component'
+import RewardCreate from '@components/reward-create/reward-create.component'
+import RewardDetail from '@components/reward-detail/reward-detail.component'
+import Subscription from '@components/subscription/subscription.component'
 import UserCreate from '@components/user-create/user-create.component'
 
 const Dashboard = () => {
@@ -21,6 +25,18 @@ const Dashboard = () => {
           </Route>
           <Route path='/accounts'>
             <Accounts />
+          </Route>
+          <Route path='/rewards/create'>
+            <RewardCreate />
+          </Route>
+          <Route path='/rewards/:rewardId'>
+            <RewardDetail />
+          </Route>
+          <Route path='/rewards'>
+            <Rewards />
+          </Route>
+          <Route path='/subscription'>
+            <Subscription />
           </Route>
         </Switch>
       </div>

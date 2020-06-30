@@ -48,7 +48,7 @@ const ImageUpload = ({ label, onComplete, onProgress }) => {
           if (totalLength !== null) {
             const progressData = Math.round((progressEvent.loaded * 100) / totalLength)
 
-            onProgress({ progressData })
+            if (onProgress) onProgress({ progressData })
           }
         }
       }

@@ -1,6 +1,7 @@
 import { CREATE_ACCOUNT_ADD_MEMBER, CREATE_ACCOUNT_DELETE_MEMBER, CREATE_ACCOUNT_SUCCESS, CREATE_ACCOUNT_UPDATE_FORM } from '@actions/types'
 
 const initialState = {
+  email: '',
   name: '',
   placeId: null,
   members: []

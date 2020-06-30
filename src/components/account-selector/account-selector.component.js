@@ -50,12 +50,12 @@ const AccountSelector = () => {
           {accounts.map((account, index) => {
             const isActive = account.id === activeAccount?.id
             return (
-              <a
+              <button
                 key={`account-${index}`}
                 className={`dropdown-item${isActive ? ' is-active' : ''}`}
                 onClick={() => handleSetActive(account)}
               >{account.name}
-              </a>
+              </button>
             )
           })}
         </div>

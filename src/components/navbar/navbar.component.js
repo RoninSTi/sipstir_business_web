@@ -10,7 +10,6 @@ const Navbar = () => {
   const [burgerIsActive, setBurgerIsActive] = useState(false)
 
   const handleBurger = e => {
-    console.log('hey')
     e.preventDefault()
 
     setBurgerIsActive(!burgerIsActive)
@@ -34,24 +33,24 @@ const Navbar = () => {
           href='https://bulma.io'
         >
           <img
+            alt='logo'
             height='28'
             src='https://bulma.io/images/bulma-logo.png'
             width='112'
           />
         </a>
 
-        <a
+        <button
           aria-expanded='false'
           aria-label='menu'
           className={`navbar-burger burger${burgerIsActive ? ' is-active' : ''}`}
           data-target='navbarBasicExample'
           onClick={handleBurger}
-          role='button'
         >
           <span aria-hidden='true' />
           <span aria-hidden='true' />
           <span aria-hidden='true' />
-        </a>
+        </button>
       </div>
 
       <div
@@ -65,43 +64,29 @@ const Navbar = () => {
           >
             Accounts
           </NavLink>
-
-          <a className='navbar-item'>
-            Documentation
-          </a>
-
-          <div className='navbar-item has-dropdown is-hoverable'>
-            <a className='navbar-link'>
-              More
-            </a>
-
-            <div className='navbar-dropdown'>
-              <a className='navbar-item'>
-                About
-              </a>
-              <a className='navbar-item'>
-                Jobs
-              </a>
-              <a className='navbar-item'>
-                Contact
-              </a>
-              <hr className='navbar-divider' />
-              <a className='navbar-item'>
-                Report an issue
-              </a>
-            </div>
-          </div>
+          <NavLink
+            className='navbar-item'
+            to='/subscription'
+          >
+            Subscription
+          </NavLink>
+          <NavLink
+            className='navbar-item'
+            to='/rewards'
+          >
+            Rewards
+          </NavLink>
         </div>
 
         <div className='navbar-end'>
           <div className='navbar-item'>
             <div className='buttons'>
-              <a
+              <button
                 className='button is-light'
                 onClick={handleLogout}
               >
                 Log out
-              </a>
+              </button>
             </div>
           </div>
         </div>
