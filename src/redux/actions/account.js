@@ -1,11 +1,19 @@
-import { ADD_MEMBER, CREATE_ACCOUNT, DELETE_MEMBER, FETCH_MEMBER_ACCOUNTS, UPDATE_MEMBER } from '@actions/types'
+import {
+  ADD_USER,
+  CREATE_ACCOUNT,
+  DELETE_BUSINESS,
+  DELETE_USER,
+  FETCH_BUSINESSES,
+  FETCH_USER_ACCOUNTS,
+  UPDATE_USER
+} from '@actions/types'
 
-export const addMemberAction = ({ accountId, token, ...data }) => ({
-  type: ADD_MEMBER,
+export const addUserAction = ({ accountId, token, ...data }) => ({
+  type: ADD_USER,
   payload: {
     request: {
       method: 'post',
-      url: `account/${accountId}/member/add`,
+      url: `account/${accountId}/user/add`,
       data,
       headers: {
         Authorization: `Bearer ${token}`
@@ -17,18 +25,13 @@ export const addMemberAction = ({ accountId, token, ...data }) => ({
   }
 })
 
-export const createAccountAction = ({ email, placeId, name, members, token }) => ({
+export const createAccountAction = ({ token, ...data }) => ({
   type: CREATE_ACCOUNT,
   payload: {
     request: {
       method: 'post',
       url: 'account',
-      data: {
-        email,
-        placeId,
-        name,
-        members
-      },
+      data,
       headers: { Authorization: `Bearer ${token}` }
     },
     setLoading: {
@@ -37,46 +40,75 @@ export const createAccountAction = ({ email, placeId, name, members, token }) =>
   }
 })
 
-export const deleteMemberAction = ({ accountId, memberId, token }) => ({
-  type: DELETE_MEMBER,
+export const deleteBusinessAction = ({ accountId, token }) => ({
+  type: DELETE_BUSINESS,
   payload: {
     request: {
       method: 'delete',
-      url: `account/${accountId}/member/${memberId}`,
+      url: `account/${accountId}`,
       headers: {
         Authorization: `Bearer ${token}`
       }
     },
     setLoading: {
-      meta: memberId
+      meta: accountId
     }
   }
 })
 
-export const getMemberAccountsAction = ({ memberId, token }) => ({
-  type: FETCH_MEMBER_ACCOUNTS,
+export const deleteUserAction = ({ accountId, userId, token }) => ({
+  type: DELETE_USER,
+  payload: {
+    request: {
+      method: 'delete',
+      url: `account/${accountId}/user/${userId}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    },
+    setLoading: {
+      meta: userId
+    }
+  }
+})
+
+export const getBusinessesAction = ({ token }) => ({
+  type: FETCH_BUSINESSES,
   payload: {
     request: {
       method: 'get',
-      url: `member/${memberId}/accounts`,
+      url: 'accounts',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  }
+})
+
+export const getUserAccountsAction = ({ userId, token }) => ({
+  type: FETCH_USER_ACCOUNTS,
+  payload: {
+    request: {
+      method: 'get',
+      url: `user/${userId}/accounts`,
       headers: { Authorization: `Bearer ${token}` }
     }
   }
 })
 
-export const updateMemberAction = ({ accountId, memberId, token, ...data }) => ({
-  type: UPDATE_MEMBER,
+export const updateUserAction = ({ accountId, userId, token, ...data }) => ({
+  type: UPDATE_USER,
   payload: {
     request: {
       method: 'put',
-      url: `account/${accountId}/member/${memberId}`,
+      url: `account/${accountId}/user/${userId}`,
       data,
       headers: {
         Authorization: `Bearer ${token}`
       }
     },
     setLoading: {
-      meta: memberId
+      meta: userId
     }
   }
 })

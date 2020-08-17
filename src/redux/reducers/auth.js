@@ -1,40 +1,15 @@
-import { CHECK_USERNAME_SUCCESS, CREATE_MEMBER_SUCCESS, SET_AUTH } from '@actions/types'
-
-/**
- * isAuthenticated denotes an auth0 success
- * isValidated denotes auth0 success and the account user has been fetched
- */
+import { SET_AUTH } from '@actions/types'
 
 const initialState = {
-  claims: null,
-  isAuthenticated: false,
-  isLoading: true,
-  isValidated: false,
-  token: null,
   user: null,
-  usernameExists: false
+  token: null
 }
 
 const reducer = (state = initialState, action) => {
   const { type } = action
-  let { payload } = action
-
-  if (payload && payload.history) {
-    const { history, ...payloadWithOutHistory } = payload
-    payload = payloadWithOutHistory
-  }
+  const { payload } = action
 
   switch (type) {
-  case CHECK_USERNAME_SUCCESS:
-    return {
-      ...state,
-      ...payload
-    }
-  case CREATE_MEMBER_SUCCESS:
-    return {
-      ...state,
-      isValidated: true
-    }
   case SET_AUTH:
     return {
       ...state,

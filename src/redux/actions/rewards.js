@@ -1,9 +1,8 @@
-import { CREATE_REWARD, FETCH_REWARDS, UPDATE_REWARD } from '@actions/types'
+import { CREATE_REWARD, DELETE_REWARD, FETCH_REWARDS, UPDATE_REWARD } from '@actions/types'
 
-export const createRewardAction = ({ history, token, ...rewardData }) => ({
+export const createRewardAction = ({ token, ...rewardData }) => ({
   type: CREATE_REWARD,
   payload: {
-    history,
     request: {
       method: 'post',
       url: 'reward',
@@ -16,6 +15,22 @@ export const createRewardAction = ({ history, token, ...rewardData }) => ({
     },
     setLoading: {
       meta: null
+    }
+  }
+})
+
+export const deleteRewardAction = ({ token, rewardId }) => ({
+  type: DELETE_REWARD,
+  payload: {
+    request: {
+      method: 'delete',
+      url: `reward/${rewardId}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    },
+    setLoading: {
+      meta: rewardId
     }
   }
 })

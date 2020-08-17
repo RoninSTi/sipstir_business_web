@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 
-import Auth0Provider from '@contexts/auth0-context.component'
+import AppRedirect from '@components/app-redirect/app-redirect.component'
 import ProtectedRoute from '@components/protected-route/protected-route.component'
 
 import Dashboard from '@views/dashboard/dashboard.component'
@@ -23,16 +23,15 @@ const App = () => {
     <Provider store={store}>
       <Elements stripe={stripePromise}>
         <Router>
-          <Auth0Provider>
-            <Switch>
-              <Route path='/login'>
-                <Login />
-              </Route>
-              <ProtectedRoute path='/'>
-                <Dashboard />
-              </ProtectedRoute>
-            </Switch>
-          </Auth0Provider>
+          <AppRedirect />
+          <Switch>
+            <Route path='/login'>
+              <Login />
+            </Route>
+            <ProtectedRoute path='/'>
+              <Dashboard />
+            </ProtectedRoute>
+          </Switch>
         </Router>
       </Elements>
     </Provider>

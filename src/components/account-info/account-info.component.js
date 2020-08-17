@@ -1,111 +1,69 @@
 import React from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addMemberAction } from '@actions/account'
-import { ADD_MEMBER } from '@actions/types'
+import { SET_REDIRECT } from '@redux/actions/types'
 
-import AccountSelector from '@components/account-selector/account-selector.component'
+import AccountInfoBlock from '@components/account-info-block/account-info-block.component'
 import GooglePhoto from '../google-photo/google-photo.component'
-import MemberInput from '@components/member-input/member-input.component'
-import MemberRow from '@components/member-row/member-row.component'
+
+import useStyles from './account-info.style'
 
 const AccountInfo = () => {
+  const classes = useStyles()
+
   const dispatch = useDispatch()
 
   const account = useSelector(state => state.account.activeAccount)
-  const token = useSelector(state => state.auth.token)
-  const isAddingMember = useSelector(state => state.ui.isLoading.some(item => item.loadingAction === ADD_MEMBER))
 
-  const handleOnAdd = ({ email, role }) => {
-    dispatch(addMemberAction({ email, role, accountId: account.id, token }))
+  const numRewards = useSelector(state => state.rewards.rewards.length)
+
+  const handleOnClickRewards = () => {
+    dispatch({ type: SET_REDIRECT, payload: '/rewards' })
+  }
+
+  const handleOnClickPlan = () => {
+    dispatch({ type: SET_REDIRECT, payload: '/subscription' })
   }
 
   return (
-    <div>
-      <div className='box mb-2'>
-        <div className='field'>
-          <label className='label'>Active account</label>
-          <div className='control'>
-            <AccountSelector />
-          </div>
-        </div>
-        <div className='field'>
-          <label className='label'>Name</label>
-          <div className='control'>
-            <input
-              className='input'
-              disabled
-              name='name'
-              type='text'
-              value={account?.name || 'Account name'}
+    <div className={`box ${classes.box}`}>
+      <div className='container'>
+        <div className='columns is-gapless'>
+          <div className='column is-one-quarter'>
+            <GooglePhoto
+              // eslint-disable-next-line camelcase
+              photoreference={account?.location?.photo?.photo_reference}
+              size={200}
             />
           </div>
-        </div>
-        <div className='field'>
-          <label className='label'>Location</label>
-          <article className='media'>
-            <div className='media-left'>
-              <figure className='image is-64x64'>
-                <GooglePhoto
-                  maxheight={64}
-                  // eslint-disable-next-line camelcase
-                  photoreference={account?.location?.photo?.photo_reference}
-                />
-              </figure>
-            </div>
-            <div className='media-content'>
-              <div className='content' />
-              <strong>{account?.location?.name || 'Location name'}</strong>
-              <br />
-              <span>{account?.location?.vicinity || 'Location vicinity'}</span>
-            </div>
-          </article>
-        </div>
-        {account?.user &&
-          <div className='field'>
-            <label className='label'>App user</label>
-            <article className='media'>
-              <div className='media-left'>
-                <figure className='image is-64x64'>
-                  <img
-                    alt='avatar'
-                    src={account?.user?.avatar}
-                  />
-                </figure>
+          <div className='column'>
+            <div className={classes.info}>
+              <div className={classes.infoSubtitle}>
+                <span>{account?.name || 'Account name'}</span>
               </div>
-              <div className='media-content'>
-                <div className='content' />
-                <strong>{account?.user?.username || 'Username'}</strong>
+              <div>
+                <span className={classes.infoTitle}>{account?.location?.name || 'Location name'}</span>
                 <br />
-                <span>{account?.user?.email || 'Email'}</span>
+                <span className={classes.infoVicinity}>{account?.location?.vicinity || 'Location vicinity'}</span>
               </div>
-            </article>
-          </div>}
-        <div className='field'>
-          <MemberInput
-            isLoading={isAddingMember}
-            onAdd={handleOnAdd}
-          />
-          {account?.members.length > 0 &&
-            <div className='table-container'>
-              <table className='table is-fullwidth'>
-                <thead>
-                  <tr>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {account.members.map((member, index) => (
-                    <MemberRow
-                      key={`member-${member.id}`}
-                      member={member}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>}
+            </div>
+          </div>
+          <div className='column is-two-fifths'>
+            <div className={classes.blockContainer}>
+              <AccountInfoBlock
+                buttonTitle='Manage'
+                onClick={handleOnClickRewards}
+                subtitle='Rewards'
+                title={`${numRewards}`}
+              />
+              <AccountInfoBlock
+                buttonTitle='Manage'
+                onClick={handleOnClickPlan}
+                subtitle='Payment Method'
+                title='Visa'
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

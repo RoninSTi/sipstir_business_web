@@ -1,24 +1,47 @@
-import { put, takeEvery } from 'redux-saga/effects'
+import { put, takeEvery, select } from 'redux-saga/effects'
 
-import { CREATE_REWARD_SUCCESS, FETCH_REWARDS, UPDATE_REWARD_SUCCESS } from '@actions/types'
+import {
+  CREATE_REWARD_SUCCESS,
+  DELETE_REWARD_SUCCESS,
+  SET_REDIRECT,
+  UPDATE_REWARD_SUCCESS
+} from '@actions/types'
+import { fetchRewardsAction } from '@actions/rewards'
 
-function * onCreateRewardSuccess(action) {
+const getAuth = state => ({
+  token: state.auth.token,
+  accountId: state.account.activeAccount?.id
+})
+
+function * fetchRewards() {
+  const auth = yield select(getAuth)
+
+  const { accountId, token } = auth
+
+  if (!accountId || !token) return
+
+  yield put(fetchRewardsAction({ accountId, token }))
+
   yield put({
-    type: FETCH_REWARDS
+    type: SET_REDIRECT,
+    payload: '/rewards'
   })
+}
 
-  const history = action.meta?.previousAction?.payload?.history
+function * onCreateRewardSuccess() {
+  yield fetchRewards()
+}
 
-  if (history) history.push('/rewards')
+function * onDeleteRewardSuccess() {
+  yield fetchRewards()
 }
 
 function * onUpdateRewardSuccess() {
-  yield put({
-    type: FETCH_REWARDS
-  })
+  yield fetchRewards()
 }
 
 export function * watchRewards() {
   yield takeEvery(CREATE_REWARD_SUCCESS, onCreateRewardSuccess)
+  yield takeEvery(DELETE_REWARD_SUCCESS, onDeleteRewardSuccess)
   yield takeEvery(UPDATE_REWARD_SUCCESS, onUpdateRewardSuccess)
 };

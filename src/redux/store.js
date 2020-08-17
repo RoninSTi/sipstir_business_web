@@ -12,6 +12,8 @@ import reducer from '@reducers/reducer'
 import rootSaga from '@redux/saga/saga'
 import clients from '@services/api'
 
+import { composeWithDevTools } from 'redux-devtools-extension'
+
 const sagaMiddleware = createSagaMiddleware()
 
 const middleware = [multiClientMiddleware(clients), sagaMiddleware]
@@ -25,7 +27,9 @@ const persistedState = loadState()
 const store = createStore(
   reducer,
   persistedState,
-  applyMiddleware(...middleware)
+  composeWithDevTools(
+    applyMiddleware(...middleware)
+  )
 )
 
 store.subscribe(throttle(() => {

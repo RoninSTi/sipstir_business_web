@@ -1,22 +1,30 @@
 import { put, takeEvery } from 'redux-saga/effects'
 
-import { SET_AUTH } from '@actions/types'
-import { createMemberAction } from '@actions/member'
+import { ATTEMPT_LOGOUT, LOGIN_SUCCESS, SET_AUTH } from '@actions/types'
 
-function * onSetAuth(action) {
-  const {
+function * onAttemptLogout() {
+  yield put({
+    type: SET_AUTH,
     payload: {
-      isAuthenticated,
+      user: null,
+      token: null
+    }
+  })
+}
+
+function * onLoginSuccess(action) {
+  const { accessToken: token, user } = action.payload.data
+
+  yield put({
+    type: SET_AUTH,
+    payload: {
       token,
       user
     }
-  } = action
-
-  if (isAuthenticated && user && token) {
-    yield put(createMemberAction({ email: user.email, token }))
-  }
-};
+  })
+}
 
 export function * watchAuth() {
-  yield takeEvery(SET_AUTH, onSetAuth)
+  yield takeEvery(ATTEMPT_LOGOUT, onAttemptLogout)
+  yield takeEvery(LOGIN_SUCCESS, onLoginSuccess)
 };

@@ -1,42 +1,64 @@
 import { put, takeEvery, select } from 'redux-saga/effects'
 
 import {
-  ADD_MEMBER_SUCCESS,
-  CREATE_USER_SUCCESS,
-  FETCH_MEMBER_ACCOUNTS_SUCCESS,
+  ADD_USER_SUCCESS,
+  CREATE_ACCOUNT_SUCCESS,
+  DELETE_BUSINESS_SUCCESS,
+  DELETE_USER_SUCCESS,
+  FETCH_USER_ACCOUNTS_SUCCESS,
   SET_ACTIVE_ACCOUNT,
-  UPDATE_MEMBER_SUCCESS
+  SET_REDIRECT,
+  UPDATE_USER_SUCCESS
 } from '@actions/types'
-import { getMemberAccountsAction } from '@actions/account'
-import { DELETE_MEMBER_SUCCESS } from '../actions/types'
+import { getBusinessesAction, getUserAccountsAction } from '@actions/account'
 
 const getActiveAccount = state => state.account.activeAccount
-const getMemberId = state => state.member.id
 const getToken = state => state.auth.token
+const getUserId = state => state.auth.user?.id
 
 function * fetchAccounts() {
-  const memberId = yield select(getMemberId)
+  const userId = yield select(getUserId)
   const token = yield select(getToken)
-  yield put(getMemberAccountsAction({ memberId, token }))
+
+  if (!userId || !token) return
+
+  yield put(getUserAccountsAction({ userId, token }))
 }
 
-function * onAddMemberSuccess() {
+function * fetchBusinesses() {
+  const token = yield select(getToken)
+
+  if (!token) return
+
+  yield put(getBusinessesAction({ token }))
+}
+
+function * onAddUserSuccess() {
   yield fetchAccounts()
 }
 
-function * onDeleteMemberSuccess() {
+function * onCreateAccountSuccess() {
+  yield fetchBusinesses()
+
+  yield put({
+    type: SET_REDIRECT,
+    payload: '/'
+  })
+}
+
+function * onDeleteBusinessSuccess() {
+  yield fetchBusinesses()
+}
+
+function * onDeleteUserSuccess() {
   yield fetchAccounts()
 }
 
-function * onUpdateMemberSuccess() {
+function * onUpdateUserSuccess() {
   yield fetchAccounts()
 }
 
-function * onCreateUserSuccess() {
-  yield fetchAccounts()
-}
-
-function * onFetchMemberAccountsSuccess(action) {
+function * onFetchUserAccountsSuccess(action) {
   const activeAccount = yield select(getActiveAccount)
 
   const accounts = action.payload.data
@@ -59,9 +81,10 @@ function * onFetchMemberAccountsSuccess(action) {
 }
 
 export function * watchAccount() {
-  yield takeEvery(ADD_MEMBER_SUCCESS, onAddMemberSuccess)
-  yield takeEvery(CREATE_USER_SUCCESS, onCreateUserSuccess)
-  yield takeEvery(DELETE_MEMBER_SUCCESS, onDeleteMemberSuccess)
-  yield takeEvery(FETCH_MEMBER_ACCOUNTS_SUCCESS, onFetchMemberAccountsSuccess)
-  yield takeEvery(UPDATE_MEMBER_SUCCESS, onUpdateMemberSuccess)
+  yield takeEvery(ADD_USER_SUCCESS, onAddUserSuccess)
+  yield takeEvery(CREATE_ACCOUNT_SUCCESS, onCreateAccountSuccess)
+  yield takeEvery(DELETE_BUSINESS_SUCCESS, onDeleteBusinessSuccess)
+  yield takeEvery(DELETE_USER_SUCCESS, onDeleteUserSuccess)
+  yield takeEvery(FETCH_USER_ACCOUNTS_SUCCESS, onFetchUserAccountsSuccess)
+  yield takeEvery(UPDATE_USER_SUCCESS, onUpdateUserSuccess)
 };

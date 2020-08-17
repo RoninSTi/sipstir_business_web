@@ -20,6 +20,8 @@ const ImageUpload = ({ label, onComplete, onProgress }) => {
     const fileParts = file.name.split('.')
     const [localFileName, fileType] = fileParts
 
+    console.log({ file })
+
     setFileName(localFileName)
 
     const fileId = uuidv4()

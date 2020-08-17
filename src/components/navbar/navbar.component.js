@@ -1,24 +1,72 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
-import { useAuth0 } from '@contexts/auth0-context.component'
+import { useDispatch, useSelector } from 'react-redux'
+import { ATTEMPT_LOGOUT } from '@redux/actions/types'
+
+import AccountSelector from '@components/account-selector/account-selector.component'
+
+import useStyles from './navbar.styles'
+
+import NAV_LOGO from '../../assets/images/barsnap_nav_logo.png'
+
+const EmployeeItems = () => {
+  return (
+    <>
+      <AccountSelector />
+      <NavLink
+        activeClassName='is-active'
+        className='navbar-item has-text-weight-bold is-size-6'
+        to='/'
+      >
+        Businesses
+      </NavLink>
+    </>
+  )
+}
+
+const AdminItems = () => {
+  return (
+    <>
+      <AccountSelector />
+      <NavLink
+        activeClassName='is-active'
+        className='navbar-item has-text-weight-bold is-size-6'
+        exact
+        to='/'
+      >
+        Overview
+      </NavLink>
+      <NavLink
+        activeClassName='is-active'
+        className='navbar-item has-text-weight-bold is-size-6'
+        to='/rewards'
+      >
+        Rewards
+      </NavLink>
+      <NavLink
+        activeClassName='is-active'
+        className='navbar-item has-text-weight-bold is-size-6'
+        to='/subscription'
+      >
+        Plan
+      </NavLink>
+    </>
+  )
+}
 
 const Navbar = () => {
-  const auth0 = useAuth0()
+  const dispatch = useDispatch()
 
-  const [burgerIsActive, setBurgerIsActive] = useState(false)
+  const classes = useStyles()
 
-  const handleBurger = e => {
-    e.preventDefault()
-
-    setBurgerIsActive(!burgerIsActive)
-  }
+  const isEmployee = useSelector(state => state.auth.user?.roles.some(role => role === 'employee'))
 
   const handleLogout = e => {
     e.preventDefault()
 
-    auth0.logout({ returnTo: window.location.origin })
+    dispatch({ type: ATTEMPT_LOGOUT })
   }
 
   return (
@@ -27,70 +75,48 @@ const Navbar = () => {
       className='navbar'
       role='navigation'
     >
-      <div className='navbar-brand'>
-        <a
-          className='navbar-item'
-          href='https://bulma.io'
-        >
-          <img
-            alt='logo'
-            height='28'
-            src='https://bulma.io/images/bulma-logo.png'
-            width='112'
-          />
-        </a>
-
-        <button
-          aria-expanded='false'
-          aria-label='menu'
-          className={`navbar-burger burger${burgerIsActive ? ' is-active' : ''}`}
-          data-target='navbarBasicExample'
-          onClick={handleBurger}
-        >
-          <span aria-hidden='true' />
-          <span aria-hidden='true' />
-          <span aria-hidden='true' />
-        </button>
-      </div>
-
-      <div
-        className={`navbar-menu${burgerIsActive ? ' is-active' : ''}`}
-        id='navbarBasicExample'
-      >
-        <div className='navbar-start'>
-          <NavLink
+      <div className='container'>
+        <div className='navbar-brand'>
+          <Link
             className='navbar-item'
-            to='/accounts'
+            to='/'
           >
-            Accounts
-          </NavLink>
-          <NavLink
-            className='navbar-item'
-            to='/subscription'
-          >
-            Subscription
-          </NavLink>
-          <NavLink
-            className='navbar-item'
-            to='/rewards'
-          >
-            Rewards
-          </NavLink>
+            <img
+              alt='logo'
+              src={NAV_LOGO}
+            />
+          </Link>
         </div>
 
-        <div className='navbar-end'>
-          <div className='navbar-item'>
-            <div className='buttons'>
-              <button
-                className='button is-light'
-                onClick={handleLogout}
-              >
-                Log out
-              </button>
+        <div className='navbar-start'>
+          <div className='navbar-item has-text-white'>
+            <div className={classes.brandText}>
+              <span
+                className='has-text-weight-bold'
+                style={{ fontSize: 21, lineHeight: '22px' }}
+              >BarSnap
+              </span>
+              <span
+                className='has-text-weight-bold'
+                style={{ fontSize: 14, lineHeight: '13px' }}
+              >For Business
+              </span>
             </div>
           </div>
         </div>
+
+        <div className='navbar-end'>
+          {isEmployee ? <EmployeeItems /> : <AdminItems />}
+          <div className='navbar-item'>
+            <button
+              className={`button is-text has-text-weight-bold is-size-6 ${classes.logoutButton}`}
+              onClick={handleLogout}
+            >Logout
+            </button>
+          </div>
+        </div>
       </div>
+
     </nav>
   )
 }

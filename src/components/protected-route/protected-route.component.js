@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-import { useSelector } from 'react-redux'
-import { Redirect, Route } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Route } from 'react-router-dom'
+import { SET_REDIRECT } from '@redux/actions/types'
 
 const ProtectedRoute = ({ path, children }) => {
-  const isValidated = useSelector(state => state.auth.isValidated)
+  const dispatch = useDispatch()
 
-  if (!isValidated) return <Redirect to='/login' />
+  const user = useSelector(state => state.auth.user)
+
+  useEffect(() => {
+    if (!user) {
+      dispatch({ type: SET_REDIRECT, payload: '/login' })
+    }
+  })
 
   return <Route path={path}>{children}</Route>
 }

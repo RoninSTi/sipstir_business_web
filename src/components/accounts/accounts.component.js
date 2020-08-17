@@ -1,36 +1,25 @@
 import React, { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { getMemberAccountsAction } from '@actions/account'
-
-import { Link } from 'react-router-dom'
+import { getUserAccountsAction } from '@actions/account'
 
 import AccountInfo from '@components/account-info/account-info.component'
 
 const Accounts = () => {
   const dispatch = useDispatch()
 
-  const memberId = useSelector(state => state.member.id)
+  const userId = useSelector(state => state.auth.user?.id)
   const token = useSelector(state => state.auth.token)
-  const showCreateAccountButton = useSelector(state => state.member.permissions.some(permission => permission === 'create:account'))
 
   useEffect(() => {
-    if (memberId) {
-      dispatch(getMemberAccountsAction({ memberId, token }))
+    if (userId && token) {
+      dispatch(getUserAccountsAction({ userId, token }))
     }
-  }, [dispatch, memberId, token])
+  }, [dispatch, userId, token])
 
   return (
     <div>
       <AccountInfo />
-      {showCreateAccountButton &&
-        <div>
-          <Link
-            className='button is-primary'
-            to='/accounts/create'
-          >Create Account
-          </Link>
-        </div>}
     </div>
   )
 }

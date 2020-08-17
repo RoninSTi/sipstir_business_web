@@ -1,157 +1,126 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { CREATE_REWARD, CREATE_REWARD_UPDATE_FORM } from '@actions/types'
-import { createRewardAction } from '@actions/rewards'
+import { CREATE_REWARD } from '@actions/types'
+import { createRewardAction, updateRewardAction } from '@actions/rewards'
 
-import { useHistory } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers'
+import * as yup from 'yup'
 
-import ImageUpload from '@components/image-upload/image-upload.component'
+import { useParams } from 'react-router-dom'
 
-const RewardCreate = () => {
+import PageHeader from '@components/page-header/page-header.component'
+import { UPDATE_REWARD } from '../../redux/actions/types'
+
+const schema = yup.object().shape({
+  isActive: yup.boolean().required(),
+  message: yup.string().required(),
+  points: yup.number().required(),
+  title: yup.string().required()
+})
+
+const AccountCreate = () => {
   const dispatch = useDispatch()
 
-  const history = useHistory()
+  const { register, handleSubmit, errors, setValue } = useForm({
+    resolver: yupResolver(schema)
+  })
 
-  const { discount, isActive, image, message, name, points, subject } = useSelector(state => state.createReward)
+  const { rewardId } = useParams()
+
+  const reward = useSelector(state => state.rewards.rewards.find(rwd => rwd.id === parseInt(rewardId)))
+
+  useEffect(() => {
+    if (reward) {
+      Object.keys(reward).forEach(key => {
+        setValue(key, reward[key], {
+          shouldValidate: true,
+          shouldDirty: true
+        })
+      })
+    }
+  }, [reward, setValue])
+
+  const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === CREATE_REWARD || item.loadingType === UPDATE_REWARD))
+
   const token = useSelector(state => state.auth.token)
-  const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === CREATE_REWARD))
+
   const accountId = useSelector(state => state.account.activeAccount?.id)
 
-  const handleInputChange = e => {
-    let { name, value } = e.target
-
-    if (name === 'isActive') {
-      value = !isActive
-    }
-
-    if (name === 'discount' || name === 'points') {
-      value = parseInt(value)
-    }
-
-    dispatch({ type: CREATE_REWARD_UPDATE_FORM, payload: { name, value } })
-  }
-
-  const handleSubmit = e => {
-    e.preventDefault()
-
-    dispatch(createRewardAction({ accountId, history, token, discount, isActive, image, message, name, points, subject }))
-  }
-
-  const handleUpload = ({ fileUrl }) => {
-    dispatch({
-      type: CREATE_REWARD_UPDATE_FORM,
-      payload: {
-        name: 'image',
-        value: `${fileUrl}`
-      }
-    })
+  const onSubmit = data => {
+    const action = reward ? updateRewardAction({ ...data, rewardId, token }) : createRewardAction({ accountId, ...data, token })
+    dispatch(action)
   }
 
   return (
-    <div className='card'>
-      <div className='card-content'>
-        <div className='content'>
-          <form onSubmit={handleSubmit}>
-            <div className='field'>
-              <label className='label'>Name</label>
-              <div className='control'>
-                <input
-                  className='input'
-                  name='name'
-                  onChange={handleInputChange}
-                  placeholder='Reward name'
-                  type='text'
-                  value={name}
-                />
-              </div>
+    <div>
+      <PageHeader title={`${reward ? 'Update' : 'Add'} New Reward`} />
+      <div className='box'>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='field'>
+            <label className='label'>Title</label>
+            <div className='control'>
+              <input
+                ref={register}
+                className='input'
+                name='title'
+                placeholder='10% off your next bill'
+                type='text'
+              />
             </div>
-            <div className='field'>
-              <label className='label'>Subject</label>
-              <div className='control'>
-                <input
-                  className='input'
-                  name='subject'
-                  onChange={handleInputChange}
-                  placeholder='Reward subject'
-                  type='text'
-                  value={subject}
-                />
-              </div>
+            {errors.title && <p className='help is-danger'>{errors.title?.message}</p>}
+          </div>
+          <div className='field'>
+            <label className='label'>Message</label>
+            <div className='control'>
+              <input
+                ref={register}
+                className='input'
+                name='message'
+                placeholder='Offer for a limited time only!'
+                type='text'
+              />
             </div>
-            <div className='field'>
-              <label className='label'>Message</label>
-              <div className='control'>
-                <input
-                  className='input'
-                  name='message'
-                  onChange={handleInputChange}
-                  placeholder='Reward message'
-                  type='text'
-                  value={message}
-                />
-              </div>
+            {errors.message && <p className='help is-danger'>{errors.message?.message}</p>}
+          </div>
+          <div className='field'>
+            <label className='label'>Points</label>
+            <div className='control'>
+              <input
+                ref={register}
+                className='input'
+                defaultValue={100}
+                name='points'
+                type='number'
+              />
             </div>
-            <div className='field'>
-              <label className='label'>Points</label>
-              <div className='control'>
-                <input
-                  className='input'
-                  name='points'
-                  onChange={handleInputChange}
-                  placeholder='Points required for reward'
-                  type='number'
-                  value={points}
-                />
-              </div>
-            </div>
-            <div className='field'>
-              <label className='label'>Discount</label>
-              <div className='control'>
-                <input
-                  className='input'
-                  name='discount'
-                  onChange={handleInputChange}
-                  placeholder='Percentage off bill'
-                  type='number'
-                  value={discount}
-                />
-              </div>
-            </div>
-            <ImageUpload
-              label='Reward image'
-              onComplete={handleUpload}
-            />
-            {image &&
-              <img
-                alt='reward'
-                src={image}
-              />}
-            <div className='field'>
-              <label className='checkbox'>
-                <input
-                  checked={isActive}
-                  name='isActive'
-                  onChange={handleInputChange}
-                  type='checkbox'
-                />
-                Active
-              </label>
-            </div>
-            <div className='field'>
-              <div className='control'>
-                <button
-                  className={`button is-primary${isLoading ? ' is-loading' : ''}`}
-                  type='submit'
-                >Create reward
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
+            {errors.points && <p className='help is-danger'>{errors.points?.message}</p>}
+          </div>
+          <div className='field'>
+            <label className='checkbox'>
+              <input
+                ref={register}
+                defaultValue
+                name='isActive'
+                type='checkbox'
+              />
+              Activate
+            </label>
+            {errors.isActive && <p className='help is-danger'>{errors.isActive?.message}</p>}
+          </div>
+          <div className='field'>
+            <button
+              className={`button is-info mt-2${isLoading ? ' is-loading' : ''}`}
+              type='submit'
+            >Submit
+            </button>
+          </div>
+        </form>
       </div>
     </div>
+
   )
 }
 
-export default RewardCreate
+export default AccountCreate

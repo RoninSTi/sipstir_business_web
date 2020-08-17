@@ -25,17 +25,13 @@ export const createUserAction = ({ avatar, email, username, token }) => ({
   }
 })
 
-export const loginAction = ({ email, history, token }) => ({
+export const loginAction = ({ ...params }) => ({
   type: LOGIN,
-  history,
   payload: {
     request: {
-      method: 'post',
-      url: 'auth/login',
-      data: {
-        email
-      },
-      headers: { Authorization: `Bearer ${token}` }
+      method: 'get',
+      url: 'auth/swoop/callback',
+      params
     }
   }
 })

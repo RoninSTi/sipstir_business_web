@@ -17,7 +17,7 @@ function * addLoading({ loadingType, meta }) {
 }
 
 function * checkLoading(action) {
-  const { setLoading } = action.payload
+  const setLoading = action.payload?.setLoading
 
   if (setLoading) {
     yield onUpdateLoading({
@@ -52,7 +52,6 @@ function * removeLoading({ loadingType, meta }) {
 }
 
 function * onUpdateLoading(action) {
-  console.log({ action })
   const {
     payload: {
       loadingAction,
