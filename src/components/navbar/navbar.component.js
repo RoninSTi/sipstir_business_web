@@ -10,6 +10,7 @@ import AccountSelector from '@components/account-selector/account-selector.compo
 import useStyles from './navbar.styles'
 
 import NAV_LOGO from '../../assets/images/barsnap_nav_logo.png'
+import { SET_MODAL } from '../../redux/actions/types'
 
 const EmployeeItems = () => {
   return (
@@ -48,9 +49,9 @@ const AdminItems = () => {
       <NavLink
         activeClassName='is-active'
         className='navbar-item has-text-weight-bold is-size-6'
-        to='/subscription'
+        to='/my-account'
       >
-        Plan
+        My Account
       </NavLink>
     </>
   )
@@ -66,7 +67,15 @@ const Navbar = () => {
   const handleLogout = e => {
     e.preventDefault()
 
-    dispatch({ type: ATTEMPT_LOGOUT })
+    dispatch({
+      type: SET_MODAL,
+      payload: {
+        activeModal: 'confirmation',
+        dispatchOnClose: { type: ATTEMPT_LOGOUT },
+        message: 'Are you sure you want to logout?',
+        title: 'Logout?'
+      }
+    })
   }
 
   return (

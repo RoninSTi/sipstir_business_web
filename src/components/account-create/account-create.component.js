@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { CREATE_ACCOUNT } from '@actions/types'
+import { CREATE_ACCOUNT, UPDATE_ACCOUNT } from '@actions/types'
 import { createAccountAction } from '@actions/account'
 
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers'
 import * as yup from 'yup'
+
+import { Link } from 'react-router-dom'
 
 import GooglePlaceSelect from '@components/google-place-select/google-place-select.component'
 import PageHeader from '@components/page-header/page-header.component'
@@ -28,7 +30,7 @@ const AccountCreate = () => {
     resolver: yupResolver(schema)
   })
 
-  const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === CREATE_ACCOUNT))
+  const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === CREATE_ACCOUNT || item.loadingType === UPDATE_ACCOUNT))
 
   const token = useSelector(state => state.auth.token)
 
@@ -78,14 +80,15 @@ const AccountCreate = () => {
             <label className='label'>Google Place</label>
             <div className='control'>
               <GooglePlaceSelect onSelectSuggest={handleOnSelectSuggest} />
-              <input
-                ref={register}
-                name='placeId'
-                type='hidden'
-              />
+
             </div>
             {errors.placeId && <p className='help is-danger'>{errors.placeId?.message}</p>}
           </div>
+          <input
+            ref={register}
+            name='placeId'
+            type='hidden'
+          />
           <div className='field'>
             <label className='label'>Main Contact Name</label>
             <div className='control'>
@@ -113,11 +116,18 @@ const AccountCreate = () => {
             {errors.phone && <p className='help is-danger'>{errors.phone?.message}</p>}
           </div>
           <div className='field'>
-            <button
-              className={`button is-info mt-2${isLoading ? ' is-loading' : ''}`}
-              type='submit'
-            >Submit
-            </button>
+            <div className='buttons'>
+              <Link
+                className='button'
+                to='/'
+              >Cancel
+              </Link>
+              <button
+                className={`button is-info${isLoading ? ' is-loading' : ''}`}
+                type='submit'
+              >Submit
+              </button>
+            </div>
           </div>
         </form>
       </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteUserAction, updateUserAction } from '@actions/account'
-import { DELETE_USER, UPDATE_USER } from '@actions/types'
+import { DELETE_USER, SET_MODAL, UPDATE_USER } from '@actions/types'
 
 const UserRow = ({ user }) => {
   const dispatch = useDispatch()
@@ -22,7 +22,15 @@ const UserRow = ({ user }) => {
   }
 
   const handleDelete = () => {
-    dispatch(deleteUserAction({ accountId, userId: user.id, token }))
+    dispatch({
+      type: SET_MODAL,
+      payload: {
+        activeModal: 'confirmation',
+        dispatchOnClose: deleteUserAction({ accountId, userId: user.id, token }),
+        message: 'Are you sure you want to delete this user from your account?',
+        title: 'Delete user?'
+      }
+    })
   }
 
   const handleSave = () => {

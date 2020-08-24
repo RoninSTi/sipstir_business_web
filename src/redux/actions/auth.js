@@ -32,6 +32,9 @@ export const loginAction = ({ ...params }) => ({
       method: 'get',
       url: 'auth/swoop/callback',
       params
+    },
+    setLoading: {
+      meta: null
     }
   }
 })

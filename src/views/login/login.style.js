@@ -1,6 +1,11 @@
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
+  button: {
+    '&.is-primary.is-loading::after': {
+      borderColor: 'transparent transparent #E7493E #E7493E !important'
+    }
+  },
   loginContainer: {
     alignItems: 'center',
     display: 'flex',

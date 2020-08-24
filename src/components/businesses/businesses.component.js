@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteBusinessAction } from '@redux/actions/account'
+import { useSelector } from 'react-redux'
 
 import { Link } from 'react-router-dom'
 
+import BusinessRow from '@components/business-row/business-row.component'
 import PageHeader from '@components/page-header/page-header.component'
 
 import useStyles from './businesses.style'
@@ -12,15 +12,7 @@ import useStyles from './businesses.style'
 const Businesses = () => {
   const classes = useStyles()
 
-  const dispatch = useDispatch()
-
   const businesses = useSelector(state => state.account.businesses)
-
-  const token = useSelector(state => state.auth.token)
-
-  const handleDeleteBusiness = business => {
-    dispatch(deleteBusinessAction({ accountId: business.id, token }))
-  }
 
   return (
     <div>
@@ -58,24 +50,10 @@ const Businesses = () => {
             </tr>
           </thead>
           <tbody>
-            {businesses.map(business => (
-              <tr key={`business-${business.id}`}>
-                <td>{business.name}</td>
-                <td>{business.location.vicinity}</td>
-                <td>{business.email}</td>
-                <td>Yes</td>
-                <td>
-                  <div className='buttons'>
-                    <button className='button is-small'>Edit</button>
-                    <button
-                      className='button is-primary is-small'
-                      onClick={() => handleDeleteBusiness(business)}
-                    >Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {businesses.map(business => <BusinessRow
+              key={`business-${business.id}`}
+              business={business}
+            />)}
           </tbody>
         </table>
       </div>

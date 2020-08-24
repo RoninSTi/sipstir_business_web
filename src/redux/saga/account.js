@@ -11,8 +11,10 @@ import {
   UPDATE_USER_SUCCESS
 } from '@actions/types'
 import { getBusinessesAction, getUserAccountsAction } from '@actions/account'
+import { UPDATE_ACCOUNT_SUCCESS } from '../actions/types'
 
 const getActiveAccount = state => state.account.activeAccount
+const getIsEmployee = state => state.auth.user?.roles.some(role => role === 'employee')
 const getToken = state => state.auth.token
 const getUserId = state => state.auth.user?.id
 
@@ -54,6 +56,26 @@ function * onDeleteUserSuccess() {
   yield fetchAccounts()
 }
 
+function * onUpdateAccountSuccess() {
+  const isEmployee = yield select(getIsEmployee)
+
+  if (isEmployee) {
+    yield fetchBusinesses()
+
+    yield put({
+      type: SET_REDIRECT,
+      payload: '/'
+    })
+  } else {
+    yield fetchAccounts()
+
+    yield put({
+      type: SET_REDIRECT,
+      payload: '/my-account'
+    })
+  }
+}
+
 function * onUpdateUserSuccess() {
   yield fetchAccounts()
 }
@@ -86,5 +108,6 @@ export function * watchAccount() {
   yield takeEvery(DELETE_BUSINESS_SUCCESS, onDeleteBusinessSuccess)
   yield takeEvery(DELETE_USER_SUCCESS, onDeleteUserSuccess)
   yield takeEvery(FETCH_USER_ACCOUNTS_SUCCESS, onFetchUserAccountsSuccess)
+  yield takeEvery(UPDATE_ACCOUNT_SUCCESS, onUpdateAccountSuccess)
   yield takeEvery(UPDATE_USER_SUCCESS, onUpdateUserSuccess)
 };

@@ -1,6 +1,10 @@
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
+  accountImage: {
+    height: '200px',
+    width: '200px'
+  },
   blockContainer: {
     alignItems: 'stretch',
     display: 'flex',
@@ -11,13 +15,17 @@ const useStyles = createUseStyles({
   box: {
     padding: 0
   },
+  editButton: {
+    color: '#E7493E !important',
+    textDecoration: 'none !important'
+  },
   image: {
     height: 200,
     width: 200
   },
   info: {
-    paddingBottom: 30,
-    paddingTop: 30
+    paddingBottom: 20,
+    paddingTop: 20
   },
   infoSubtitle: {
     color: '#A0A0A0',

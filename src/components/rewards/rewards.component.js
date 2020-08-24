@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteRewardAction } from '@redux/actions/rewards'
-import { DELETE_REWARD } from '@redux/actions/types'
+import { useSelector } from 'react-redux'
 
 import { Link } from 'react-router-dom'
 
@@ -10,21 +8,12 @@ import useStyles from './rewards.style'
 
 import NoRewards from '@components/no-rewards/no-rewards.component'
 import PageHeader from '@components/page-header/page-header.component'
+import RewardRow from '@components/reward-row/reward-row.component'
 
 const Rewards = () => {
   const classes = useStyles()
 
-  const dispatch = useDispatch()
-
-  const isLoading = useSelector(state => state.ui.isLoading)
-
   const rewards = useSelector(state => state.rewards.rewards)
-
-  const token = useSelector(state => state.auth.token)
-
-  const handleDeleteReward = rewardId => {
-    dispatch(deleteRewardAction({ rewardId, token }))
-  }
 
   return (
     <div>
@@ -59,35 +48,10 @@ const Rewards = () => {
                 </tr>
               </thead>
               <tbody>
-                {rewards.map(reward => {
-                  const isDeleting = isLoading.some(element => element.loadingType === DELETE_REWARD && element.meta === reward.id)
-                  return (
-                    <tr key={`reward-${reward.id}`}>
-                      <td>{reward.title}</td>
-                      <td>{reward.message}</td>
-                      <td>{reward.points}</td>
-                      <td>{reward.isActive ? 'Active' : 'Inactive'}</td>
-                      <td>
-                        <div
-                          className='buttons'
-                          style={{ justifyContent: 'flex-end' }}
-                        >
-                          <Link
-                            className='button is-small'
-                            to={`/rewards/${reward.id}`}
-                          >Edit
-                          </Link>
-                          <button
-                            className={`button is-primary is-small${isDeleting ? ' is-loading' : ''}`}
-                            disabled={reward.isActive}
-                            onClick={() => handleDeleteReward(reward.id)}
-                          >Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })}
+                {rewards.map(reward => <RewardRow
+                  key={`reward-${reward.id}`}
+                  reward={reward}
+                />)}
               </tbody>
             </table>
           </div>)}

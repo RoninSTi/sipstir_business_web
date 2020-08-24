@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers'
 import * as yup from 'yup'
 
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import PageHeader from '@components/page-header/page-header.component'
 import { UPDATE_REWARD } from '../../redux/actions/types'
@@ -101,6 +101,7 @@ const AccountCreate = () => {
             <label className='checkbox'>
               <input
                 ref={register}
+                className='mr-2'
                 defaultValue
                 name='isActive'
                 type='checkbox'
@@ -110,11 +111,18 @@ const AccountCreate = () => {
             {errors.isActive && <p className='help is-danger'>{errors.isActive?.message}</p>}
           </div>
           <div className='field'>
-            <button
-              className={`button is-info mt-2${isLoading ? ' is-loading' : ''}`}
-              type='submit'
-            >Submit
-            </button>
+            <div className='buttons mt-2'>
+              <Link
+                className='button'
+                to='/rewards'
+              >Cancel
+              </Link>
+              <button
+                className={`button is-info${isLoading ? ' is-loading' : ''}`}
+                type='submit'
+              >Submit
+              </button>
+            </div>
           </div>
         </form>
       </div>

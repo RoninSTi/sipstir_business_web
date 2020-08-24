@@ -11,6 +11,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import AppRedirect from '@components/app-redirect/app-redirect.component'
 import ProtectedRoute from '@components/protected-route/protected-route.component'
 
+import ConfirmationModal from '@components/confirmation-modal/confirmation-modal.component'
 import Dashboard from '@views/dashboard/dashboard.component'
 import Login from '@views/login/login.component'
 
@@ -32,6 +33,7 @@ const App = () => {
               <Dashboard />
             </ProtectedRoute>
           </Switch>
+          <ConfirmationModal />
         </Router>
       </Elements>
     </Provider>

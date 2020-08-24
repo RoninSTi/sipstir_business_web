@@ -5,6 +5,7 @@ import {
   DELETE_USER,
   FETCH_BUSINESSES,
   FETCH_USER_ACCOUNTS,
+  UPDATE_ACCOUNT,
   UPDATE_USER
 } from '@actions/types'
 
@@ -92,6 +93,20 @@ export const getUserAccountsAction = ({ userId, token }) => ({
       method: 'get',
       url: `user/${userId}/accounts`,
       headers: { Authorization: `Bearer ${token}` }
+    }
+  }
+})
+
+export const updateAccountAction = ({ accountId, token, ...data }) => ({
+  type: UPDATE_ACCOUNT,
+  payload: {
+    request: {
+      method: 'put',
+      url: `account/${accountId}`,
+      data,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     }
   }
 })

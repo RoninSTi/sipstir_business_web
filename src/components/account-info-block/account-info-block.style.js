@@ -12,8 +12,7 @@ const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    paddingBottom: 30,
-    paddingTop: 30
+    maxHeight: '200px'
   },
   subtitle: {
     color: '#A0A0A0',

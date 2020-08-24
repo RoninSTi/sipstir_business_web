@@ -30,11 +30,16 @@ const AccountInfo = () => {
       <div className='container'>
         <div className='columns is-gapless'>
           <div className='column is-one-quarter'>
-            <GooglePhoto
-              // eslint-disable-next-line camelcase
-              photoreference={account?.location?.photo?.photo_reference}
-              size={200}
+            {account?.image ? <img
+              alt='business'
+              className={classes.accountImage}
+              src={`${account.image}?w=200&h=200&fit=crop`}
             />
+              : <GooglePhoto
+                // eslint-disable-next-line camelcase
+                photoreference={account?.location?.photo?.photo_reference}
+                size={200}
+              />}
           </div>
           <div className='column'>
             <div className={classes.info}>
@@ -45,6 +50,7 @@ const AccountInfo = () => {
                 <span className={classes.infoTitle}>{account?.location?.name || 'Location name'}</span>
                 <br />
                 <span className={classes.infoVicinity}>{account?.location?.vicinity || 'Location vicinity'}</span>
+                <br />
               </div>
             </div>
           </div>

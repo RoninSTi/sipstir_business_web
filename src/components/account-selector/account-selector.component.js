@@ -60,7 +60,7 @@ const AccountSelector = () => {
                 <a
                   key={`account-${index}`}
                   className={`dropdown-item ${classes.dropdownItem}${isActive ? ' is-active' : ''}`}
-                  href='#'
+                  href='/#'
                   onClick={() => handleSetActive(account)}
                 >{account.name}
                 </a>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { useSelector } from 'react-redux'
 
@@ -8,21 +8,16 @@ import { v4 as uuidv4 } from 'uuid'
 
 const api = apiClients.default.client
 
-const ImageUpload = ({ label, onComplete, onProgress }) => {
+const ImageUpload = ({ onComplete, onProgress }) => {
   const fileInput = useRef(null)
-
-  const [fileName, setFileName] = useState('')
 
   const token = useSelector(state => state.auth.token)
 
   const handleFile = async () => {
     const file = fileInput.current.files[0]
     const fileParts = file.name.split('.')
-    const [localFileName, fileType] = fileParts
-
-    console.log({ file })
-
-    setFileName(localFileName)
+    // eslint-disable-next-line no-unused-vars
+    const [fileName, fileType] = fileParts
 
     const fileId = uuidv4()
 
@@ -48,9 +43,14 @@ const ImageUpload = ({ label, onComplete, onProgress }) => {
         onUploadProgress: (progressEvent) => {
           const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length')
           if (totalLength !== null) {
-            const progressData = Math.round((progressEvent.loaded * 100) / totalLength)
+            const progress = Math.round((progressEvent.loaded * 100) / totalLength)
 
-            if (onProgress) onProgress({ progressData })
+            const progressData = {
+              progress,
+              isUploading: progress < 1
+            }
+
+            if (onProgress) onProgress(progressData)
           }
         }
       }
@@ -64,30 +64,24 @@ const ImageUpload = ({ label, onComplete, onProgress }) => {
   }
 
   return (
-    <div className='field'>
-      <label className='label'>{label}</label>
-      <div className='file has-name'>
-        <label className='file-label'>
-          <input
-            ref={fileInput}
-            className='file-input'
-            name='resume'
-            onChange={handleFile}
-            type='file'
-          />
-          <span className='file-cta'>
-            <span className='file-icon'>
-              <i className='fas fa-upload' />
-            </span>
-            <span className='file-label'>
-              Choose a file…
-            </span>
+    <div className='file'>
+      <label className='file-label'>
+        <input
+          ref={fileInput}
+          className='file-input'
+          name='resume'
+          onChange={handleFile}
+          type='file'
+        />
+        <span className='file-cta is-info'>
+          <span className='file-icon'>
+            <i className='fas fa-upload' />
           </span>
-          <span className='file-name'>
-            {fileName}
+          <span className='file-label'>
+            Change Photo
           </span>
-        </label>
-      </div>
+        </span>
+      </label>
     </div>
   )
 }
