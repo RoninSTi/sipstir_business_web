@@ -47,7 +47,7 @@ const ImageUpload = ({ onComplete, onProgress }) => {
 
             const progressData = {
               progress,
-              isUploading: progress < 1
+              isUploading: progress < 100
             }
 
             if (onProgress) onProgress(progressData)

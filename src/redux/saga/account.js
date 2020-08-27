@@ -2,16 +2,20 @@ import { put, takeEvery, select } from 'redux-saga/effects'
 
 import {
   ADD_USER_SUCCESS,
+  CANCEL_SUBSCRIPTION_SUCCESS,
   CREATE_ACCOUNT_SUCCESS,
+  CREATE_SUBSCRIPTION_SUCCESS,
   DELETE_BUSINESS_SUCCESS,
   DELETE_USER_SUCCESS,
   FETCH_USER_ACCOUNTS_SUCCESS,
   SET_ACTIVE_ACCOUNT,
   SET_REDIRECT,
+  UPDATE_ACCOUNT_SUCCESS,
   UPDATE_USER_SUCCESS
 } from '@actions/types'
-import { getBusinessesAction, getUserAccountsAction } from '@actions/account'
-import { UPDATE_ACCOUNT_SUCCESS } from '../actions/types'
+import { fetchAccountActivityAction, getBusinessesAction, getUserAccountsAction } from '@actions/account'
+import { fetchSubscriptionAction } from '@actions/subscription'
+
 
 const getActiveAccount = state => state.account.activeAccount
 const getIsEmployee = state => state.auth.user?.roles.some(role => role === 'employee')
@@ -35,7 +39,23 @@ function * fetchBusinesses() {
   yield put(getBusinessesAction({ token }))
 }
 
+function * fetchAccountActivity({ accountId }) {
+  const token = yield select(getToken)
+
+  yield put(fetchAccountActivityAction({ accountId, token }))
+}
+
+function * fetchSubscription({ accountId }) {
+  const token = yield select(getToken)
+
+  yield put(fetchSubscriptionAction({ accountId, token }))
+}
+
 function * onAddUserSuccess() {
+  yield fetchAccounts()
+}
+
+function * onCancelSubscriptionSuccess() {
   yield fetchAccounts()
 }
 
@@ -46,6 +66,10 @@ function * onCreateAccountSuccess() {
     type: SET_REDIRECT,
     payload: '/'
   })
+}
+
+function * onCreateSubscriptionSuccess() {
+  yield fetchAccounts()
 }
 
 function * onDeleteBusinessSuccess() {
@@ -102,12 +126,23 @@ function * onFetchUserAccountsSuccess(action) {
   }
 }
 
+function * onSetActiveAccount(action) {
+  const { payload: account } = action
+
+  yield fetchSubscription({ accountId: account.id })
+
+  yield fetchAccountActivity({ accountId: account.id })
+}
+
 export function * watchAccount() {
   yield takeEvery(ADD_USER_SUCCESS, onAddUserSuccess)
   yield takeEvery(CREATE_ACCOUNT_SUCCESS, onCreateAccountSuccess)
+  yield takeEvery(CANCEL_SUBSCRIPTION_SUCCESS, onCancelSubscriptionSuccess)
+  yield takeEvery(CREATE_SUBSCRIPTION_SUCCESS, onCreateSubscriptionSuccess)
   yield takeEvery(DELETE_BUSINESS_SUCCESS, onDeleteBusinessSuccess)
   yield takeEvery(DELETE_USER_SUCCESS, onDeleteUserSuccess)
   yield takeEvery(FETCH_USER_ACCOUNTS_SUCCESS, onFetchUserAccountsSuccess)
+  yield takeEvery(SET_ACTIVE_ACCOUNT, onSetActiveAccount)
   yield takeEvery(UPDATE_ACCOUNT_SUCCESS, onUpdateAccountSuccess)
   yield takeEvery(UPDATE_USER_SUCCESS, onUpdateUserSuccess)
 };

@@ -15,6 +15,9 @@ const useStyles = createUseStyles({
   box: {
     padding: 0
   },
+  column: {
+    maxHeight: '200px'
+  },
   editButton: {
     color: '#E7493E !important',
     textDecoration: 'none !important'

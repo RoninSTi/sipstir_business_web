@@ -1,19 +1,18 @@
 import { CREATE_SUBSCRIPTION, FETCH_PRODUCTS } from '@actions/types'
 
-export const createSubscriptionAction = ({ customerId, paymentMethodId, priceId, token }) => ({
+export const createSubscriptionAction = ({ token, ...data }) => ({
   type: CREATE_SUBSCRIPTION,
   payload: {
     request: {
       method: 'post',
       url: 'subscription',
-      data: {
-        customerId,
-        paymentMethodId,
-        priceId
-      },
+      data,
       headers: {
         Authorization: `Bearer ${token}`
       }
+    },
+    setLoading: {
+      meta: null
     }
   }
 })

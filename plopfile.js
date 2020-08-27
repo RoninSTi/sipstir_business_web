@@ -59,11 +59,6 @@ module.exports = plop => {
         type: 'add',
         path: 'src/redux/reducers/{{name}}.js',
         templateFile: 'plop-templates/Reducer.js.hbs'
-      },
-      {
-        type: 'add',
-        path: 'src/components/{{dashCase name}}/{{dashCase name}}.style.js',
-        templateFile: 'plop-templates/ComponentStyle.js.hbs'
       }
     ]
   })

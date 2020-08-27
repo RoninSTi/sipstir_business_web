@@ -29,7 +29,7 @@ const AccountInfo = () => {
     <div className={`box ${classes.box}`}>
       <div className='container'>
         <div className='columns is-gapless'>
-          <div className='column is-one-quarter'>
+          <div className={`column is-one-quarter ${classes.column}`}>
             {account?.image ? <img
               alt='business'
               className={classes.accountImage}
@@ -41,7 +41,7 @@ const AccountInfo = () => {
                 size={200}
               />}
           </div>
-          <div className='column'>
+          <div className={`column ${classes.column}`}>
             <div className={classes.info}>
               <div className={classes.infoSubtitle}>
                 <span>{account?.name || 'Account name'}</span>
@@ -54,7 +54,7 @@ const AccountInfo = () => {
               </div>
             </div>
           </div>
-          <div className='column is-two-fifths'>
+          <div className={`column is-two-fifths ${classes.column}`}>
             <div className={classes.blockContainer}>
               <AccountInfoBlock
                 buttonTitle='Manage'

@@ -3,6 +3,7 @@ import {
   CREATE_ACCOUNT,
   DELETE_BUSINESS,
   DELETE_USER,
+  FETCH_ACCOUNT_ACTIVITY,
   FETCH_BUSINESSES,
   FETCH_USER_ACCOUNTS,
   UPDATE_ACCOUNT,
@@ -69,6 +70,22 @@ export const deleteUserAction = ({ accountId, userId, token }) => ({
     },
     setLoading: {
       meta: userId
+    }
+  }
+})
+
+export const fetchAccountActivityAction = ({ accountId, token }) => ({
+  type: FETCH_ACCOUNT_ACTIVITY,
+  payload: {
+    request: {
+      method: 'get',
+      url: `activity/account/${accountId}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    },
+    setLoading: {
+      meta: null
     }
   }
 })

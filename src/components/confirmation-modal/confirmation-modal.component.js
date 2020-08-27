@@ -13,7 +13,6 @@ const ConfirmationModal = props => {
 
   const handleConfirmation = () => {
     if (action) {
-      console.log('dispatch!')
       dispatch(action)
     }
 

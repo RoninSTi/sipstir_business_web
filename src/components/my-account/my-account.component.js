@@ -1,7 +1,9 @@
 import React from 'react'
 
 import AccountBox from '@components/account-box/account-box.component'
+import ActivityBox from '@components/activity-box/activity-box.component'
 import PageHeader from '@components/page-header/page-header.component'
+import PlanBox from '@components/plan-box/plan-box.component'
 import ProfileBox from '@components/profile-box/profile-box.component'
 
 // import useStyles from './my-account.style'
@@ -19,7 +21,7 @@ const MyAccount = props => {
           </div>
           <div className='tile is-child'>
             <div className='box'>
-              Plan Stuff
+              <PlanBox />
             </div>
           </div>
         </div>
@@ -31,7 +33,7 @@ const MyAccount = props => {
           </div>
           <div className='tile is-child'>
             <div className='box'>
-              Activity Stuff
+              <ActivityBox />
             </div>
           </div>
         </div>
