@@ -58,7 +58,7 @@ const SubscriptionModal = props => {
         }
       })
     }
-  }, [cardElement, setErrors])
+  }, [cardElement, errors, setErrors])
 
   const handleSelectPrice = (price) => {
     dispatch({

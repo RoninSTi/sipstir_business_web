@@ -14,7 +14,8 @@ require('yup-phone')
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
-  phone: yup.string().phone().required()
+  phone: yup.string().phone().required(),
+  url: yup.string().url().required()
 })
 
 const ProfileBox = props => {
@@ -89,6 +90,23 @@ const ProfileBox = props => {
                 />
               </div>
               {errors.phone && <p className='help is-danger'>{errors.phone?.message}</p>}
+            </div>
+          </div>
+        </div>
+        <div className='columns'>
+          <div className='column'>
+            <div className='field'>
+              <label className='label'>Business URL</label>
+              <div className='control'>
+                <input
+                  ref={register}
+                  className='input'
+                  name='url'
+                  placeholder='drinkourbooze.com'
+                  type='text'
+                />
+              </div>
+              {errors.url && <p className='help is-danger'>{errors.url?.message}</p>}
             </div>
           </div>
         </div>

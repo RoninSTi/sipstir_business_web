@@ -10,12 +10,13 @@ const Accounts = () => {
 
   const userId = useSelector(state => state.auth.user?.id)
   const token = useSelector(state => state.auth.token)
+  const isEmployee = useSelector(state => state.auth.user?.roles.some(role => role === 'employee'))
 
   useEffect(() => {
-    if (userId && token) {
+    if (!isEmployee && userId && token) {
       dispatch(getUserAccountsAction({ userId, token }))
     }
-  }, [dispatch, userId, token])
+  }, [dispatch, isEmployee, userId, token])
 
   return (
     <div>

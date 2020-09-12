@@ -9,7 +9,7 @@ import * as QueryString from 'query-string'
 
 import useStyles from './login.style'
 
-import NAV_LOGO from '../../assets/images/barsnap_nav_logo.png'
+import NAV_LOGO from '../../assets/images/sipstir_nav_logo.png'
 import { LOGIN, SET_REDIRECT } from '@redux/actions/types'
 
 const Login = () => {
@@ -55,7 +55,7 @@ const Login = () => {
                     width={84}
                   />
                   <div className={classes.titleContainer}>
-                    <span className={classes.title}>BarSnap</span>
+                    <span className={classes.title}>SipStir</span>
                     <span className={classes.subtitle}>For Business</span>
                   </div>
                 </div>
