@@ -2,6 +2,8 @@ import { put, select, takeEvery } from 'redux-saga/effects'
 
 import { SET_LOADING, UPDATE_LOADING } from '@actions/types'
 
+import { toast } from 'react-toastify'
+
 const getLoaders = state => state.ui.isLoading
 
 function * addLoading({ loadingType, meta }) {
@@ -51,6 +53,10 @@ function * removeLoading({ loadingType, meta }) {
   })
 }
 
+function onError(action) {
+  toast.error(action.error?.message)
+}
+
 function * onUpdateLoading(action) {
   const {
     payload: {
@@ -75,5 +81,6 @@ function * onUpdateLoading(action) {
 export function * watchUI() {
   yield takeEvery(action => action.payload?.setLoading, checkLoading)
   yield takeEvery(action => action.meta?.previousAction, checkLoading)
+  yield takeEvery(action => action.error, onError)
   yield takeEvery(UPDATE_LOADING, onUpdateLoading)
 };

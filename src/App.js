@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 
+import { ToastContainer } from 'react-toastify'
+
 import AppRedirect from '@components/app-redirect/app-redirect.component'
 import ProtectedRoute from '@components/protected-route/protected-route.component'
 
@@ -35,6 +37,7 @@ const App = () => {
           </Switch>
           <Modals />
         </Router>
+        <ToastContainer />
       </Elements>
     </Provider>
   )
