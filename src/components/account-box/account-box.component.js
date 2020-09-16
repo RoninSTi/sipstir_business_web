@@ -45,7 +45,7 @@ const AccountBox = props => {
             : <GooglePhoto
               // eslint-disable-next-line camelcase
               photoreference={account?.location?.photo?.photo_reference}
-              size={200}
+              size={120}
             />}
           {uploadProgress > 0 && uploadProgress < 100 &&
             <progress

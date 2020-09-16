@@ -28,10 +28,10 @@ const Login = () => {
   useEffect(() => {
     const { code, state } = params
 
-    if (code && state && !user) {
+    if (code && state && !user && !isLoading) {
       dispatch(loginAction({ code, state }))
     }
-  }, [dispatch, params, user])
+  }, [dispatch, isLoading, params, user])
 
   useEffect(() => {
     if (user) {

@@ -21,7 +21,7 @@ const schema = yup.object().shape({
   placeId: yup.string().required(),
   contactName: yup.string().required(),
   phone: yup.string().phone().required(),
-  url: yup.string().url().required
+  url: yup.string().url().required()
 })
 
 const AccountCreate = () => {

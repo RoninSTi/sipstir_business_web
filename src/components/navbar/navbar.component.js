@@ -9,7 +9,7 @@ import AccountSelector from '@components/account-selector/account-selector.compo
 
 import useStyles from './navbar.styles'
 
-import NAV_LOGO from '../../assets/images/barsnap_nav_logo.png'
+import NAV_LOGO from '../../assets/images/sipstir_nav_logo.png'
 import { SET_MODAL } from '../../redux/actions/types'
 
 const EmployeeItems = () => {
@@ -103,7 +103,7 @@ const Navbar = () => {
               <span
                 className='has-text-weight-bold'
                 style={{ fontSize: 21, lineHeight: '22px' }}
-              >BarSnap
+              >SipStir
               </span>
               <span
                 className='has-text-weight-bold'

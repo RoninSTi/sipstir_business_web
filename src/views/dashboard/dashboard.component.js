@@ -30,7 +30,7 @@ const Dashboard = () => {
   const token = useSelector(state => state.auth.token)
 
   useEffect(() => {
-    if (userId && token) {
+    if (!isEmployee && userId && token) {
       dispatch(getUserAccountsAction({ userId, token }))
     }
 
