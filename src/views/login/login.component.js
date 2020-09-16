@@ -61,7 +61,7 @@ const Login = () => {
                 </div>
                 <a
                   className={`button is-primary is-inverted has-text-weight-semibold ${classes.button}${isLoading ? ' is-loading' : ''}`}
-                  href={`${process.env.REACT_APP_API_URL}/auth/swoop`}
+                  href={`${process.env.REACT_APP_API_URL}auth/swoop`}
                   rel='noopener noreferrer'
                   target='_blank'
                 >
