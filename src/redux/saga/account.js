@@ -9,6 +9,7 @@ import {
   DELETE_USER_SUCCESS,
   FETCH_USER_ACCOUNTS_SUCCESS,
   SET_ACTIVE_ACCOUNT,
+  SET_MODAL,
   SET_REDIRECT,
   UPDATE_ACCOUNT_SUCCESS,
   UPDATE_USER_SUCCESS
@@ -108,6 +109,17 @@ function * onFetchUserAccountsSuccess(action) {
   const activeAccount = yield select(getActiveAccount)
 
   const accounts = action.payload.data
+
+  if (accounts.length === 0) {
+    yield put({
+      type: SET_MODAL,
+      payload: {
+        activeModal: 'no-accounts'
+      }
+    })
+
+    return
+  }
 
   if (!activeAccount) {
     const accountToSetActive = accounts[0]

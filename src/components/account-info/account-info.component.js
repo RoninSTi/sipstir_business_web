@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { SET_REDIRECT } from '@redux/actions/types'
 
 import AccountInfoBlock from '@components/account-info-block/account-info-block.component'
-import GooglePhoto from '../google-photo/google-photo.component'
+import GooglePhoto from '@components/google-photo/google-photo.component'
+import NoAccount from '@components/no-account/no-account.component'
 
 import useStyles from './account-info.style'
 
@@ -25,7 +26,7 @@ const AccountInfo = () => {
     dispatch({ type: SET_REDIRECT, payload: '/subscription' })
   }
 
-  return (
+  return account ? (
     <div className={`box ${classes.box}`}>
       <div className='container'>
         <div className='columns is-gapless'>
@@ -73,7 +74,7 @@ const AccountInfo = () => {
         </div>
       </div>
     </div>
-  )
+  ) : <NoAccount />
 }
 
 export default AccountInfo
