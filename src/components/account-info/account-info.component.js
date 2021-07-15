@@ -22,9 +22,9 @@ const AccountInfo = () => {
     dispatch({ type: SET_REDIRECT, payload: '/rewards' })
   }
 
-  const handleOnClickPlan = () => {
-    dispatch({ type: SET_REDIRECT, payload: '/subscription' })
-  }
+  // const handleOnClickPlan = () => {
+  //   dispatch({ type: SET_REDIRECT, payload: '/subscription' })
+  // }
 
   return account ? (
     <div className={`box ${classes.box}`}>
@@ -63,12 +63,12 @@ const AccountInfo = () => {
                 subtitle='Rewards'
                 title={`${numRewards}`}
               />
-              <AccountInfoBlock
+              {/* <AccountInfoBlock
                 buttonTitle='Manage'
                 onClick={handleOnClickPlan}
                 subtitle='Payment Method'
                 title='Visa'
-              />
+              /> */}
             </div>
           </div>
         </div>

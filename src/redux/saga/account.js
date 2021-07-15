@@ -61,8 +61,6 @@ function * onCancelSubscriptionSuccess() {
 }
 
 function * onCreateAccountSuccess() {
-  yield fetchBusinesses()
-
   yield put({
     type: SET_REDIRECT,
     payload: '/'

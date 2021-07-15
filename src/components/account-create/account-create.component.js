@@ -33,8 +33,6 @@ const AccountCreate = () => {
 
   const isLoading = useSelector(state => state.ui.isLoading.some(item => item.loadingType === CREATE_ACCOUNT || item.loadingType === UPDATE_ACCOUNT))
 
-  const token = useSelector(state => state.auth.token)
-
   const handleOnSelectSuggest = ({ value }) => {
     setValue('placeId', value, {
       shouldValidate: true,
@@ -43,12 +41,12 @@ const AccountCreate = () => {
   }
 
   const onSubmit = data => {
-    dispatch(createAccountAction({ ...data, token }))
+    dispatch(createAccountAction({ data }))
   }
 
   return (
     <div>
-      <PageHeader title='Add New Business' />
+      <PageHeader title='Business Information' />
       <div className='box'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='field'>

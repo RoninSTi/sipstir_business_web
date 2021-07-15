@@ -27,14 +27,13 @@ export const addUserAction = ({ accountId, token, ...data }) => ({
   }
 })
 
-export const createAccountAction = ({ token, ...data }) => ({
+export const createAccountAction = ({ data }) => ({
   type: CREATE_ACCOUNT,
   payload: {
     request: {
       method: 'post',
       url: 'account',
-      data,
-      headers: { Authorization: `Bearer ${token}` }
+      data
     },
     setLoading: {
       meta: null

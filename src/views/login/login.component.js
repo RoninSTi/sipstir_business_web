@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { loginAction } from '@actions/auth'
@@ -39,6 +39,8 @@ const Login = () => {
     }
   }, [dispatch, user])
 
+  const handleOnClick = () => {}
+
   return (
     <section className='hero is-primary is-fullheight'>
       <div className='hero-body'>
@@ -59,6 +61,11 @@ const Login = () => {
                     <span className={classes.subtitle}>For Business</span>
                   </div>
                 </div>
+                <Link
+                  className='button is-info has-text-weight-semibold mb-2'
+                  to='/create'
+                >Create Account
+                </Link>
                 <a
                   className={`button is-primary is-inverted has-text-weight-semibold ${classes.button}${isLoading ? ' is-loading' : ''}`}
                   href={`${process.env.REACT_APP_API_URL}auth/swoop`}

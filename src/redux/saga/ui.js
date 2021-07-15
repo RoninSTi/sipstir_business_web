@@ -54,7 +54,7 @@ function * removeLoading({ loadingType, meta }) {
 }
 
 function onError(action) {
-  toast.error(action.error?.message)
+  toast.error(action.error?.response?.data?.message || 'An error occurred')
 }
 
 function * onUpdateLoading(action) {

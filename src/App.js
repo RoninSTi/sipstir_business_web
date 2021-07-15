@@ -13,11 +13,13 @@ import { ToastContainer } from 'react-toastify'
 import AppRedirect from '@components/app-redirect/app-redirect.component'
 import ProtectedRoute from '@components/protected-route/protected-route.component'
 
+import Create from '@views/create/create.component'
 import Dashboard from '@views/dashboard/dashboard.component'
 import Login from '@views/login/login.component'
 import Modals from '@components/modals/modals.component'
 
 import '@sass/App.sass'
+import 'react-toastify/dist/ReactToastify.css'
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
 
@@ -30,6 +32,9 @@ const App = () => {
           <Switch>
             <Route path='/login'>
               <Login />
+            </Route>
+            <Route path='/create'>
+              <Create />
             </Route>
             <ProtectedRoute path='/'>
               <Dashboard />
