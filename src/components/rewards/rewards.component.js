@@ -43,6 +43,7 @@ const Rewards = () => {
                   <th>Title</th>
                   <th>Message</th>
                   <th>Points</th>
+                  <th>Redeemed</th>
                   <th>Active</th>
                   <th width={150}>Actions</th>
                 </tr>

@@ -10,7 +10,7 @@ import { DELETE_REWARD } from '../../redux/actions/types'
 const RewardRow = ({ reward }) => {
   const dispatch = useDispatch()
 
-  const { id, isActive, message, points, title } = reward
+  const { id, isActive, message, points, redemptionCount, title } = reward
 
   const token = useSelector(state => state.auth.token)
 
@@ -33,6 +33,7 @@ const RewardRow = ({ reward }) => {
       <td>{title}</td>
       <td>{message}</td>
       <td>{points}</td>
+      <td>{redemptionCount}</td>
       <td>{isActive ? 'Active' : 'Inactive'}</td>
       <td>
         <div
