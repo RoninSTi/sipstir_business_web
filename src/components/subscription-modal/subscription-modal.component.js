@@ -141,7 +141,7 @@ const SubscriptionModal = props => {
                     <div className='card-content'>
                       <div className='content'>
                         <span className={classes.offerTitle}>Yearly Renewal <span className='tag is-success'>17% Savings</span></span>
-                        <div className={classes.offerText}>$100 / Year</div>
+                        <div className={classes.offerText}>$1000 / Year</div>
                         <button
                           className={`button is-info${selectedPrice === prices[1] ? ' is-outlined' : ''}`}
                           onClick={() => handleSelectPrice(prices[0])}
@@ -156,7 +156,7 @@ const SubscriptionModal = props => {
                     <div className='card-content'>
                       <div className='content'>
                         <span className={classes.offerTitle}>Monthly Renewal</span>
-                        <div className={classes.offerText}>$10 / Month</div>
+                        <div className={classes.offerText}>$100 / Month</div>
                         <button
                           className={`button is-info${selectedPrice === prices[0] ? ' is-outlined' : ''}`}
                           onClick={() => handleSelectPrice(prices[1])}
