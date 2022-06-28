@@ -7,13 +7,12 @@ import { createAccountAction } from '@actions/account';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
+import 'yup-phone-lite';
 
 import { Link } from 'react-router-dom';
 
 import GooglePlaceSelect from '@components/google-place-select/google-place-select.component';
 import PageHeader from '@components/page-header/page-header.component';
-
-require('yup-phone');
 
 const schema = yup.object().shape({
  name: yup.string().required(),

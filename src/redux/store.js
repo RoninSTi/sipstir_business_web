@@ -1,44 +1,24 @@
-import { applyMiddleware, createStore } from 'redux'
-import { multiClientMiddleware } from 'redux-axios-middleware'
+import { configureStore } from '@reduxjs/toolkit';
+import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './reducers';
 
-import throttle from 'lodash.throttle'
+const persistConfig = {
+ key: 'root',
+ version: 1,
+ storage,
+};
 
-import logger from 'redux-logger'
-import createSagaMiddleware from 'redux-saga'
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-import { loadState, saveState } from '@utils/localStorage'
+const store = configureStore({
+ reducer: persistedReducer,
+ middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+   serializableCheck: {
+    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+   },
+  }),
+});
 
-import reducer from '@reducers/reducer'
-import rootSaga from '@redux/saga/saga'
-import clients from '@services/api'
-
-import { composeWithDevTools } from 'redux-devtools-extension'
-
-const sagaMiddleware = createSagaMiddleware()
-
-const middleware = [multiClientMiddleware(clients), sagaMiddleware]
-
-if (process.env.NODE_ENV === 'development') {
-  middleware.push(logger)
-}
-
-const persistedState = loadState()
-
-const store = createStore(
-  reducer,
-  persistedState,
-  composeWithDevTools(
-    applyMiddleware(...middleware)
-  )
-)
-
-store.subscribe(throttle(() => {
-  saveState({
-    auth: store.getState().auth,
-    account: store.getState().account
-  })
-}, 1000))
-
-sagaMiddleware.run(rootSaga)
-
-export default store
+export default store;

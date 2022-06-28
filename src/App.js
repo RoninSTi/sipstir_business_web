@@ -11,10 +11,12 @@ import { loadStripe } from '@stripe/stripe-js';
 import { ToastContainer } from 'react-toastify';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import AppRedirect from '@components/app-redirect/app-redirect.component';
 import ProtectedRoute from '@components/protected-route/protected-route.component';
 
+import Auth from '@views/auth/auth.component';
 import Create from '@views/create/create.component';
 import Dashboard from '@views/dashboard/dashboard.component';
 import Login from '@views/login/login.component';
@@ -36,6 +38,9 @@ const App = () => {
      <Router>
       <AppRedirect />
       <Switch>
+       <Route exact path="/auth">
+        <Auth />
+       </Route>
        <Route exact path="/login">
         <Login />
        </Route>
@@ -52,6 +57,7 @@ const App = () => {
       <Modals />
      </Router>
      <ToastContainer />
+     <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
    </Elements>
   </Provider>
