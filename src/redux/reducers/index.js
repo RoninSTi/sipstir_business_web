@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import accountReducer from './account';
-import authReducer from './auth';
+import authReducer from '@slices/auth';
 import modalReducer from './modals';
 import navReducer from './nav';
 import rewardsReducer from './rewards';

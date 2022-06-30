@@ -4,9 +4,11 @@ import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
-
-import { login as loginFn } from '../../mutations/auth';
+import { useMutation, useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@slices/auth';
+import { login as loginFn } from '@mutations/auth';
+import { getMe } from '@queries/user';
 
 const schema = yup.object().shape({
  email: yup.string().email().required(),
@@ -14,6 +16,7 @@ const schema = yup.object().shape({
 });
 
 const Auth = () => {
+ const dispatch = useDispatch();
  const navigate = useNavigate();
 
  const { register, handleSubmit, errors } = useForm({
@@ -22,11 +25,20 @@ const Auth = () => {
 
  const from = '/';
 
+ const query = useQuery('authUser', getMe, {
+  enabled: false,
+  select: (response) => response.data,
+  retry: 1,
+  onSuccess: (data) => {
+   dispatch(setUser(data));
+   navigate(from);
+  },
+ });
+
  const { mutate: login, isLoading } = useMutation((userData) => loginFn(userData), {
   onSuccess: () => {
-   // query.refetch();
+   query.refetch();
    toast.success('You successfully logged in');
-   navigate(from);
   },
   onError: (error) => {
    if (Array.isArray(error.response.data.error)) {

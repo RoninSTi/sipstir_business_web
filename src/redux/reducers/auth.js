@@ -1,23 +1,23 @@
-import { SET_AUTH } from '@actions/types'
+import { SET_AUTH } from '@actions/types';
 
 const initialState = {
-  user: null,
-  token: null
-}
+ user: null,
+ token: null,
+};
 
 const reducer = (state = initialState, action) => {
-  const { type } = action
-  const { payload } = action
+ const { type } = action;
+ const { payload } = action;
 
-  switch (type) {
+ switch (type) {
   case SET_AUTH:
-    return {
-      ...state,
-      ...payload
-    }
+   return {
+    ...state,
+    ...payload,
+   };
   default:
-    return state
-  }
-}
+   return state;
+ }
+};
 
-export default reducer
+export default reducer;

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const NoRewards = () => {
-  return (
-    <div> No Rewards</div>
-  )
-}
+ return <div> No Rewards</div>;
+};
 
-export default NoRewards
+export default NoRewards;

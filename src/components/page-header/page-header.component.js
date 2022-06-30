@@ -1,13 +1,16 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import useStyles from './page-header.style'
+import useStyles from './page-header.style';
 
 const PageHeader = ({ title }) => {
-  const classes = useStyles()
+ const classes = useStyles();
 
-  return (
-    <h1 className={`title ${classes.title}`}>{title}</h1>
-  )
-}
+ return <h1 className={`title ${classes.title}`}>{title}</h1>;
+};
 
-export default PageHeader
+PageHeader.propTypes = {
+ title: PropTypes.string,
+};
+
+export default PageHeader;

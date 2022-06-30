@@ -1,21 +1,21 @@
-import { SET_LOADING } from '@actions/types'
+import { SET_LOADING } from '@actions/types';
 
 const initialState = {
-  isLoading: []
-}
+ isLoading: [],
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case SET_LOADING:
-    return {
-      ...state,
-      isLoading: payload
-    }
+   return {
+    ...state,
+    isLoading: payload,
+   };
   default:
-    return state
-  }
-}
+   return state;
+ }
+};
 
-export default reducer
+export default reducer;

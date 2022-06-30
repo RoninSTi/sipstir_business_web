@@ -1,86 +1,81 @@
-import { put, select, takeEvery } from 'redux-saga/effects'
+import { put, select, takeEvery } from 'redux-saga/effects';
 
-import { SET_LOADING, UPDATE_LOADING } from '@actions/types'
+import { SET_LOADING, UPDATE_LOADING } from '@actions/types';
 
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 
-const getLoaders = state => state.ui.isLoading
+const getLoaders = (state) => state.ui.isLoading;
 
-function * addLoading({ loadingType, meta }) {
-  const loaders = yield select(getLoaders)
+function* addLoading({ loadingType, meta }) {
+ const loaders = yield select(getLoaders);
 
-  yield put({
-    type: SET_LOADING,
-    payload: [
-      ...loaders,
-      { loadingType, meta }
-    ]
-  })
+ yield put({
+  type: SET_LOADING,
+  payload: [...loaders, { loadingType, meta }],
+ });
 }
 
-function * checkLoading(action) {
-  const setLoading = action.payload?.setLoading
+function* checkLoading(action) {
+ const setLoading = action.payload?.setLoading;
 
-  if (setLoading) {
-    yield onUpdateLoading({
-      payload: {
-        loadingAction: 'set',
-        loadingType: action.type,
-        meta: setLoading.meta
-      }
-    })
-  }
+ if (setLoading) {
+  yield onUpdateLoading({
+   payload: {
+    loadingAction: 'set',
+    loadingType: action.type,
+    meta: setLoading.meta,
+   },
+  });
+ }
 
-  if (action.meta?.previousAction) {
-    yield onUpdateLoading({
-      payload: {
-        loadingAction: 'unset',
-        loadingType: action.meta?.previousAction?.type,
-        meta: action.meta?.previousAction.payload.setLoading?.meta
-      }
-    })
-  }
+ if (action.meta?.previousAction) {
+  yield onUpdateLoading({
+   payload: {
+    loadingAction: 'unset',
+    loadingType: action.meta?.previousAction?.type,
+    meta: action.meta?.previousAction.payload.setLoading?.meta,
+   },
+  });
+ }
 }
 
-function * removeLoading({ loadingType, meta }) {
-  const loaders = yield select(getLoaders)
+function* removeLoading({ loadingType, meta }) {
+ const loaders = yield select(getLoaders);
 
-  const newLoaders = loaders.filter(loader => loader.loadingType !== loadingType && loader.meta !== meta)
+ const newLoaders = loaders.filter(
+  (loader) => loader.loadingType !== loadingType && loader.meta !== meta,
+ );
 
-  yield put({
-    type: SET_LOADING,
-    payload: newLoaders
-  })
+ yield put({
+  type: SET_LOADING,
+  payload: newLoaders,
+ });
 }
 
 function onError(action) {
-  toast.error(action.error?.response?.data?.message || 'An error occurred')
+ toast.error(action.error?.response?.data?.message || 'An error occurred');
 }
 
-function * onUpdateLoading(action) {
-  const {
-    payload: {
-      loadingAction,
-      loadingType,
-      meta
-    }
-  } = action
+function* onUpdateLoading(action) {
+ const {
+  payload: { loadingAction, loadingType, meta },
+ } = action;
 
-  switch (loadingAction) {
+ switch (loadingAction) {
   case 'set':
-    yield addLoading({ loadingType, meta })
-    break
+   yield addLoading({ loadingType, meta });
+   break;
   case 'unset':
-    yield removeLoading({ loadingType, meta })
-    break
+   yield removeLoading({ loadingType, meta });
+   break;
   default:
-    break
-  }
-};
+   break;
+ }
+}
 
-export function * watchUI() {
-  yield takeEvery(action => action.payload?.setLoading, checkLoading)
-  yield takeEvery(action => action.meta?.previousAction, checkLoading)
-  yield takeEvery(action => action.error, onError)
-  yield takeEvery(UPDATE_LOADING, onUpdateLoading)
-};
+export function* watchUI() {
+ yield takeEvery((action) => action.payload?.setLoading, checkLoading);
+ yield takeEvery((action) => action.meta?.previousAction, checkLoading);
+ yield takeEvery((action) => action.error, onError);
+ yield takeEvery(UPDATE_LOADING, onUpdateLoading);
+}

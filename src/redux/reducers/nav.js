@@ -1,28 +1,28 @@
-import { CLEAR_REDIRECT, SET_REDIRECT } from '@redux/actions/types'
+import { CLEAR_REDIRECT, SET_REDIRECT } from '@redux/actions/types';
 
 const initialState = {
-  redirect: null
-}
+ redirect: null,
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case CLEAR_REDIRECT:
-    return {
-      ...state,
-      redirect: null
-    }
+   return {
+    ...state,
+    redirect: null,
+   };
   case SET_REDIRECT:
-    return {
-      ...state,
-      redirect: payload
-    }
+   return {
+    ...state,
+    redirect: payload,
+   };
   default:
-    return {
-      ...state
-    }
-  }
-}
+   return {
+    ...state,
+   };
+ }
+};
 
-export default reducer
+export default reducer;

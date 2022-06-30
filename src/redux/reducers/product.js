@@ -1,27 +1,27 @@
-import { FETCH_PRODUCTS_SUCCESS, SET_PRICE } from '@actions/types'
+import { FETCH_PRODUCTS_SUCCESS, SET_PRICE } from '@actions/types';
 
 const initialState = {
-  products: [],
-  selectedPrice: null
-}
+ products: [],
+ selectedPrice: null,
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case FETCH_PRODUCTS_SUCCESS:
-    return {
-      ...state,
-      products: payload.data
-    }
+   return {
+    ...state,
+    products: payload.data,
+   };
   case SET_PRICE:
-    return {
-      ...state,
-      selectedPrice: payload
-    }
+   return {
+    ...state,
+    selectedPrice: payload,
+   };
   default:
-    return state
-  }
-}
+   return state;
+ }
+};
 
-export default reducer
+export default reducer;

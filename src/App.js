@@ -1,66 +1,32 @@
 import React from 'react';
 
-import { Provider } from 'react-redux';
-import store from '@redux/store';
-
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { useRoutes } from 'react-router-dom';
+import routes from './routes';
 
 import { ToastContainer } from 'react-toastify';
 
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-import AppRedirect from '@components/app-redirect/app-redirect.component';
-import ProtectedRoute from '@components/protected-route/protected-route.component';
-
-import Auth from '@views/auth/auth.component';
-import Create from '@views/create/create.component';
-import Dashboard from '@views/dashboard/dashboard.component';
-import Login from '@views/login/login.component';
-import Verify from '@views/verify/verify.component';
+// import Auth from '@views/auth/auth.component';
+// import AuthUserRequired from './components/auth-user-required/auth-user-required.component';
+// import Create from '@views/create/create.component';
+// import Dashboard from '@views/dashboard/dashboard.component';
+// import Login from '@views/login/login.component';
+// import Verify from '@views/verify/verify.component';
 import Modals from '@components/modals/modals.component';
 
 import '@sass/App.sass';
 import 'react-toastify/dist/ReactToastify.css';
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
-
-const queryClient = new QueryClient();
-
 const App = () => {
+ const content = useRoutes(routes);
  return (
-  <Provider store={store}>
-   <Elements stripe={stripePromise}>
-    <QueryClientProvider client={queryClient}>
-     <Router>
-      <AppRedirect />
-      <Switch>
-       <Route exact path="/auth">
-        <Auth />
-       </Route>
-       <Route exact path="/login">
-        <Login />
-       </Route>
-       <Route exact path="/create">
-        <Create />
-       </Route>
-       <Route exact path="/verify">
-        <Verify />
-       </Route>
-       <ProtectedRoute exact path="/">
-        <Dashboard />
-       </ProtectedRoute>
-      </Switch>
-      <Modals />
-     </Router>
-     <ToastContainer />
-     <ReactQueryDevtools initialIsOpen={true} />
-    </QueryClientProvider>
-   </Elements>
-  </Provider>
+  <>
+   {content}
+   <Modals />
+   <ToastContainer />
+   <ReactQueryDevtools initialIsOpen={true} />
+  </>
  );
 };
 

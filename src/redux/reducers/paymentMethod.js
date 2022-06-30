@@ -1,23 +1,23 @@
-import { FETCH_PAYMENT_METHOD_SUCCESS } from '@actions/types'
+import { FETCH_PAYMENT_METHOD_SUCCESS } from '@actions/types';
 
 const initialState = {
-  paymentMethod: null
-}
+ paymentMethod: null,
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case FETCH_PAYMENT_METHOD_SUCCESS:
-    return {
-      ...state,
-      paymentMethod: payload.data
-    }
+   return {
+    ...state,
+    paymentMethod: payload.data,
+   };
   default:
-    return {
-      ...state
-    }
-  }
-}
+   return {
+    ...state,
+   };
+ }
+};
 
-export default reducer
+export default reducer;

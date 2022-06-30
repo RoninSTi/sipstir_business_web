@@ -1,26 +1,26 @@
-import { CREATE_MEMBER_SUCCESS } from '@actions/types'
+import { CREATE_MEMBER_SUCCESS } from '@actions/types';
 
 const initialState = {
-  createdAt: '',
-  email: '',
-  id: '',
-  permissions: [],
-  updatedAt: ''
-}
+ createdAt: '',
+ email: '',
+ id: '',
+ permissions: [],
+ updatedAt: '',
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case CREATE_MEMBER_SUCCESS:
-    return {
-      ...state,
-      ...payload.data,
-      permissions: JSON.parse(payload.data.permissions)
-    }
+   return {
+    ...state,
+    ...payload.data,
+    permissions: JSON.parse(payload.data.permissions),
+   };
   default:
-    return state
-  }
-}
+   return state;
+ }
+};
 
-export default reducer
+export default reducer;

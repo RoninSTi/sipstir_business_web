@@ -1,30 +1,30 @@
-import { CLEAR_MODAL, SET_MODAL } from '@redux/actions/types'
+import { CLEAR_MODAL, SET_MODAL } from '@redux/actions/types';
 
 const initialState = {
-  activeModal: null,
-  dispatchOnClose: null,
-  title: '',
-  message: ''
-}
+ activeModal: null,
+ dispatchOnClose: null,
+ title: '',
+ message: '',
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case CLEAR_MODAL:
-    return {
-      ...initialState
-    }
+   return {
+    ...initialState,
+   };
   case SET_MODAL:
-    return {
-      ...state,
-      ...payload
-    }
+   return {
+    ...state,
+    ...payload,
+   };
   default:
-    return {
-      ...state
-    }
-  }
-}
+   return {
+    ...state,
+   };
+ }
+};
 
-export default reducer
+export default reducer;

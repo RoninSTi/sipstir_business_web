@@ -1,9 +1,7 @@
-import { createUseStyles } from 'react-jss'
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  container: {
+ container: {},
+});
 
-  }
-})
-
-export default useStyles
+export default useStyles;

@@ -1,22 +1,22 @@
-import { GET_SIGNED_URL_SUCCESS } from '@actions/types'
+import { GET_SIGNED_URL_SUCCESS } from '@actions/types';
 
 const initialState = {
-  signedRequest: null,
-  url: null
-}
+ signedRequest: null,
+ url: null,
+};
 
 const reducer = (state = initialState, action) => {
-  const { payload, type } = action
+ const { payload, type } = action;
 
-  switch (type) {
+ switch (type) {
   case GET_SIGNED_URL_SUCCESS:
-    return {
-      ...state,
-      ...payload.data
-    }
+   return {
+    ...state,
+    ...payload.data,
+   };
   default:
-    return state
-  }
-}
+   return state;
+ }
+};
 
-export default reducer
+export default reducer;
