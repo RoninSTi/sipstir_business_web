@@ -1,52 +1,27 @@
-import React, { useEffect } from 'react';
-
-import { Link, useLocation } from 'react-router-dom';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { loginAction } from '@actions/auth';
-
-import * as QueryString from 'query-string';
+import React from 'react';
+import classnames from 'classnames';
+import { Link, Navigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 import useStyles from './login.style';
 
 import NAV_LOGO from '../../assets/images/sipstir_nav_logo.png';
-import { LOGIN, SET_REDIRECT } from '@redux/actions/types';
 
 const Login = () => {
  const classes = useStyles();
 
- const dispatch = useDispatch();
+ const [cookies] = useCookies(['logged_in']);
 
- const { search } = useLocation();
-
- const params = QueryString.parse(search);
-
- const user = useSelector((state) => state.auth.user);
-
- const isLoading = useSelector((state) =>
-  state.ui.isLoading.some((element) => element.loadingType === LOGIN),
- );
-
- useEffect(() => {
-  const { code, state } = params;
-
-  if (code && state && !user && !isLoading) {
-   dispatch(loginAction({ code, state }));
-  }
- }, [dispatch, isLoading, params, user]);
-
- useEffect(() => {
-  if (user) {
-   dispatch({ type: SET_REDIRECT, payload: '/' });
-  }
- }, [dispatch, user]);
+ if (cookies.logged_in) {
+  return <Navigate to="/dashboard" />;
+ }
 
  return (
-  <section className="hero is-primary is-fullheight">
+  <section className={classnames(['hero', 'is-primary', 'is-fullheight'])}>
    <div className="hero-body">
     <div className="container">
-     <div className="columns is-centered">
-      <div className="column is-5-tablet is-4-desktop is-3-widescreen">
+     <div className={classnames(['columns', 'is-centered'])}>
+      <div className={classnames(['column', 'is-5-tablet', 'is-4-desktop', 'is-3-widescreen'])}>
        <div className={classes.loginContainer}>
         <div className={classes.logoContainer}>
          <img alt="logo" className={classes.logo} height={69} src={NAV_LOGO} width={84} />
@@ -55,13 +30,20 @@ const Login = () => {
           <span className={classes.subtitle}>For Business</span>
          </div>
         </div>
-        <Link className="button is-info has-text-weight-semibold mb-2" to="/create">
+        <Link
+         className={classnames(['button', 'is-info', 'has-text-weight-semibold', 'mb-2'])}
+         to="/create"
+        >
          Create Account
         </Link>
         <Link
-         className={`button is-primary is-inverted has-text-weight-semibold ${classes.button}${
-          isLoading ? ' is-loading' : ''
-         }`}
+         className={classnames([
+          'button',
+          'is-primary',
+          'is-inverted',
+          'has-text-weight-semibold',
+          classes.button,
+         ])}
          to="/auth"
         >
          Business Login

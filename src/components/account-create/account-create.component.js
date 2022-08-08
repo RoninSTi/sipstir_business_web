@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { CREATE_ACCOUNT, UPDATE_ACCOUNT } from '@actions/types';
-import { createAccountAction } from '@actions/account';
-
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 import 'yup-phone-lite';
 
 import { Link } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { create as createFn } from '@mutations/account';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import GooglePlaceSelect from '@components/google-place-select/google-place-select.component';
 import PageHeader from '@components/page-header/page-header.component';
@@ -24,27 +24,41 @@ const schema = yup.object().shape({
 });
 
 const AccountCreate = () => {
- const dispatch = useDispatch();
+ const navigate = useNavigate();
 
  const { register, handleSubmit, errors, setValue } = useForm({
   resolver: yupResolver(schema),
  });
 
- const isLoading = useSelector((state) =>
-  state.ui.isLoading.some(
-   (item) => item.loadingType === CREATE_ACCOUNT || item.loadingType === UPDATE_ACCOUNT,
-  ),
- );
+ const { mutate: create, isLoading } = useMutation((accountData) => createFn(accountData), {
+  onSuccess: () => {
+   toast.success('You successfully created your account.  Check your email to verify and login.');
+   navigate('/auth');
+  },
+  onError: (error) => {
+   if (Array.isArray(error.response.data.error)) {
+    error.response.data.error.forEach((el) =>
+     toast.error(el.message, {
+      position: 'top-right',
+     }),
+    );
+   } else {
+    toast.error(error.response.data.message, {
+     position: 'top-right',
+    });
+   }
+  },
+ });
+
+ const onSubmit = async (data) => {
+  await create({ data });
+ };
 
  const handleOnSelectSuggest = ({ value }) => {
   setValue('placeId', value, {
    shouldValidate: true,
    shouldDirty: true,
   });
- };
-
- const onSubmit = (data) => {
-  dispatch(createAccountAction({ data }));
  };
 
  return (

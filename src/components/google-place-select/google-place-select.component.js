@@ -16,8 +16,8 @@ const GooglePlaceSelect = ({ onSelectSuggest }) => {
   setValue(v);
  };
 
- const handleSelectSuggest = (geocodedPrediction, originalPrediction) => {
-  onSelectSuggest({ value: geocodedPrediction.place_id });
+ const handleSelectSuggest = (_, originalPrediction) => {
+  onSelectSuggest({ value: originalPrediction.place_id });
 
   setSearch('');
   setValue(originalPrediction.description);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Auth from '@views/auth/auth.component';
 import Create from '@views/create/create.component';
-// import Dashboard from '@views/dashboard/dashboard.component';
+import Dashboard from '@views/dashboard/dashboard.component';
 import Login from '@views/login/login.component';
 
 // import AccountCreate from '@components/account-create/account-create.component';
@@ -15,26 +15,23 @@ import Login from '@views/login/login.component';
 const NoMatch = () => <div>No Route</div>;
 
 const routes = [
- [
-  {
-   path: '*',
-   children: [
-    {
-     path: 'auth',
-     element: <Auth />,
-    },
-    {
-     path: 'login',
-     element: <Login />,
-    },
-    {
-     path: 'create',
-     element: <Create />,
-    },
-    { path: '*', element: <NoMatch /> },
-   ],
-  },
- ],
+ {
+  path: '/',
+  element: <Login />,
+ },
+ {
+  path: '/auth',
+  element: <Auth />,
+ },
+ {
+  path: '/create',
+  element: <Create />,
+ },
+ {
+  path: '/dashboard',
+  element: <Dashboard />,
+ },
+ { path: '*', element: <NoMatch /> },
 ];
 
 export default routes;

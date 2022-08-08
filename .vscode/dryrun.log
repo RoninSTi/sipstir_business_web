@@ -1,0 +1,7 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/craigcronin/Development/sipstir_business_web'
+heroku config:set REACT_APP_API_URL=https://api.sipstir.app/ && \
+	heroku config:set REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_51GxGm9BLR3Udnav9uSY5jUPSSpJ5ucaRotFTFexD5so0eaO5RBlvYfVUBgBZCI0NtA6i83zKLXQF28ydmvXwmcyW000cQ0Id08 && \
+	heroku config:set REACT_APP_GOOGLE_PLACE_API_KEY=AIzaSyBTTjWmcEQzb9xWo02nbND_-CiAJf-0-E0
+make: Leaving directory `/Users/craigcronin/Development/sipstir_business_web'
+ 
