@@ -7,7 +7,7 @@ const defaultClient = axios.create({
 });
 
 export const refreshAccessTokenFn = async () => {
- const response = await defaultClient.get('auth/refresh');
+ const response = await defaultClient.post('auth/refresh');
 
  return response.data;
 };
@@ -21,7 +21,8 @@ defaultClient.interceptors.response.use(
   const originalRequest = error.config;
 
   const errMessage = error.response.data.message;
-  if (errMessage.includes('not logged in') && !originalRequest._retry) {
+
+  if (errMessage.includes('Authorization token expired') && !originalRequest._retry) {
    originalRequest._retry = true;
    await refreshAccessTokenFn();
    return defaultClient(originalRequest);

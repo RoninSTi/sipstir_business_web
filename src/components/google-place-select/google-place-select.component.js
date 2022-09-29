@@ -56,7 +56,6 @@ const GooglePlaceSelect = ({ onSelectSuggest }) => {
        id="account-google-place-input"
        name="location"
        onChange={handleChange}
-       placeholder="Search a location"
        type="text"
        value={value}
       />

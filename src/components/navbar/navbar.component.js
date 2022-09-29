@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
@@ -9,11 +9,11 @@ import { logout as logoutFn } from '@mutations/auth';
 import { setUser } from '@slices/auth';
 
 import AccountSelector from '@components/account-selector/account-selector.component';
+import ConfirmationModal2 from '../confirmation-modal-2/confirmation-modal.component';
 
 import useStyles from './navbar.styles';
 
 import NAV_LOGO from '../../assets/images/sipstir_nav_logo.png';
-import { SET_MODAL } from '../../redux/actions/types';
 
 const EmployeeItems = () => {
  return (
@@ -66,6 +66,8 @@ const AdminItems = () => {
 const Navbar = () => {
  const dispatch = useDispatch();
 
+ const [confirmationIsActive, setConfirmationIsActive] = useState(false);
+
  const navigate = useNavigate();
 
  const classes = useStyles();
@@ -98,15 +100,11 @@ const Navbar = () => {
  const handleLogout = (e) => {
   e.preventDefault();
 
-  dispatch({
-   type: SET_MODAL,
-   payload: {
-    activeModal: 'confirmation',
-    dispatchOnClose: logout,
-    message: 'Are you sure you want to logout?',
-    title: 'Logout?',
-   },
-  });
+  setConfirmationIsActive(true);
+ };
+
+ const handleOnClose = () => {
+  setConfirmationIsActive(false);
  };
 
  return (
@@ -143,6 +141,13 @@ const Navbar = () => {
      </div>
     </div>
    </div>
+   <ConfirmationModal2
+    action={logout}
+    isActive={confirmationIsActive}
+    message="Are you sure you want to logout?"
+    title="Logout?"
+    onClose={handleOnClose}
+   />
   </nav>
  );
 };

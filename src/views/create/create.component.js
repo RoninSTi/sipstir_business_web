@@ -1,20 +1,18 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import AccountCreate from '@components/account-create/account-create.component';
+import useStyles from './create.styles';
 
 const Create = () => {
+ const classes = useStyles();
+
  return (
-  <section className="section">
-   <div className="container">
-    <div className="columns">
-     <div className="column is-three-fifths">
+  <section className={classnames('hero', 'is-fullheight', classes.hero)}>
+   <div className="hero-body">
+    <div className="container">
+     <div className={classnames('column', 'is-4', 'is-offset-4')}>
       <AccountCreate />
-     </div>
-     <div className="column">
-      <div className="block has-text-centered">
-       <h1 className="title">Welcome to SipStir</h1>
-       <h2 className="subtitle">Start connecting with your patrons in a more meaningful way.</h2>
-      </div>
      </div>
     </div>
    </div>

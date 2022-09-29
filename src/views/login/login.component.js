@@ -3,50 +3,141 @@ import classnames from 'classnames';
 import { Link, Navigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
-import useStyles from './login.style';
+// import NAV_LOGO from '../../assets/images/sipstir_nav_logo.png';
 
-import NAV_LOGO from '../../assets/images/sipstir_nav_logo.png';
+import LOGO_TEXT from '../../assets/images/logo_text@3x.png';
+
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers';
+import * as yup from 'yup';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@slices/auth';
+import { login as loginFn } from '@mutations/auth';
+import { getMe } from '@queries/user';
+
+import useStyles from './login.styles';
+
+const schema = yup.object().shape({
+ email: yup.string().email().required(),
+ password: yup.string().required(),
+});
 
 const Login = () => {
+ const [cookies] = useCookies(['logged_in']);
+
+ const dispatch = useDispatch();
+ const navigate = useNavigate();
+
  const classes = useStyles();
 
- const [cookies] = useCookies(['logged_in']);
+ const { register, handleSubmit, errors } = useForm({
+  resolver: yupResolver(schema),
+ });
+
+ const from = '/';
+
+ const query = useQuery('authUser', getMe, {
+  enabled: false,
+  select: (response) => response.data,
+  retry: 1,
+  onSuccess: (data) => {
+   dispatch(setUser(data));
+   navigate(from);
+  },
+ });
+
+ const { mutate: login, isLoading } = useMutation((userData) => loginFn(userData), {
+  onSuccess: () => {
+   query.refetch();
+   toast.success('You successfully logged in');
+  },
+  onError: (error) => {
+   if (Array.isArray(error.response.data.error)) {
+    error.response.data.error.forEach((el) =>
+     toast.error(el.message, {
+      position: 'top-right',
+     }),
+    );
+   } else {
+    toast.error(error.response.data.message, {
+     position: 'top-right',
+    });
+   }
+  },
+ });
+
+ const onSubmit = (data) => {
+  login({ data });
+ };
 
  if (cookies.logged_in) {
   return <Navigate to="/dashboard" />;
  }
 
  return (
-  <section className={classnames(['hero', 'is-primary', 'is-fullheight'])}>
+  <section className={classnames('hero', 'is-fullheight', classes.hero)}>
    <div className="hero-body">
     <div className="container">
-     <div className={classnames(['columns', 'is-centered'])}>
-      <div className={classnames(['column', 'is-5-tablet', 'is-4-desktop', 'is-3-widescreen'])}>
-       <div className={classes.loginContainer}>
-        <div className={classes.logoContainer}>
-         <img alt="logo" className={classes.logo} height={69} src={NAV_LOGO} width={84} />
-         <div className={classes.titleContainer}>
-          <span className={classes.title}>SipStir</span>
-          <span className={classes.subtitle}>For Business</span>
+     <div className={classnames('column', 'is-4', 'is-offset-4')}>
+      <div className="box">
+       <figure className={classes.logo}>
+        <img src={LOGO_TEXT} alt="logo" />
+       </figure>
+       <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="field">
+         <label className="label" htmlFor="email">
+          Email
+         </label>
+         <div className="control">
+          <input className="input" id="email" name="email" ref={register} type="email" />
          </div>
+         {errors.email && (
+          <p className={classnames('help', 'is-danger')}>{errors.email?.message}</p>
+         )}
         </div>
-        <Link
-         className={classnames(['button', 'is-info', 'has-text-weight-semibold', 'mb-2'])}
-         to="/create"
+
+        <div className="field">
+         <label className="label" htmlFor="password">
+          Password
+         </label>
+         <div className="control">
+          <input className="input" id="password" name="password" ref={register} type="password" />
+         </div>
+         {errors.password && (
+          <p className={classnames('help', 'is-danger')}>{errors.password?.message}</p>
+         )}
+        </div>
+        <button
+         className={classnames('button', 'is-block', 'is-fullwidth', 'is-primary', {
+          'is-loading': isLoading,
+         })}
         >
-         Create Account
+         Login
+        </button>
+       </form>
+
+       <div className={classnames('has-text-centered', 'mt-2')}>
+        <Link
+         className={classnames('has-text-primary', 'has-text-weight-medium', 'has-text-centered')}
+         to="/forgot"
+        >
+         Forgot your password?
         </Link>
-        <Link
-         className={classnames([
-          'button',
-          'is-primary',
-          'is-inverted',
-          'has-text-weight-semibold',
-          classes.button,
-         ])}
-         to="/auth"
-        >
-         Business Login
+       </div>
+       <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
+        Don&rsquo;t have an account?{' '}
+        <Link className="has-text-primary" to="/create">
+         Sign Up Now
+        </Link>
+       </div>
+       <hr />
+       <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
+        Any questions?{' '}
+        <Link className="has-text-primary" to="/contact">
+         Contact Us
         </Link>
        </div>
       </div>

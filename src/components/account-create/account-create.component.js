@@ -1,18 +1,19 @@
 import React from 'react';
-
+import classnames from 'classnames';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 import 'yup-phone-lite';
 
-import { Link } from 'react-router-dom';
+import LOGO_TEXT from '../../assets/images/logo_text@3x.png';
+
 import { useMutation } from 'react-query';
 import { create as createFn } from '@mutations/account';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import GooglePlaceSelect from '@components/google-place-select/google-place-select.component';
-import PageHeader from '@components/page-header/page-header.component';
+import useStyles from './account-create.styles';
 
 const schema = yup.object().shape({
  name: yup.string().required(),
@@ -25,6 +26,8 @@ const schema = yup.object().shape({
 
 const AccountCreate = () => {
  const navigate = useNavigate();
+
+ const classes = useStyles();
 
  const { register, handleSubmit, errors, setValue } = useForm({
   resolver: yupResolver(schema),
@@ -62,111 +65,90 @@ const AccountCreate = () => {
  };
 
  return (
-  <div>
-   <PageHeader title="Create your account" />
-   <div className="box">
-    <form onSubmit={handleSubmit(onSubmit)}>
-     <div className="field">
-      <label className="label" htmlFor="account-name-input">
-       Account Name
-      </label>
-      <div className="control">
-       <input
-        id="account-name-input"
-        ref={register}
-        className="input"
-        name="name"
-        placeholder="Popular watering hole"
-        type="text"
-       />
-      </div>
-      {errors.name && <p className="help is-danger">{errors.name?.message}</p>}
+  <div className="box">
+   <figure className={classes.logo}>
+    <img src={LOGO_TEXT} alt="logo" />
+   </figure>
+   <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="field">
+     <label className="label" htmlFor="account-name-input">
+      Account Name
+     </label>
+     <div className="control">
+      <input id="account-name-input" ref={register} className="input" name="name" type="text" />
      </div>
-     <div className="field">
-      <label className="label" htmlFor="account-email-input">
-       Primary Email
-      </label>
-      <div className="control">
-       <input
-        id="account-email-input"
-        ref={register}
-        className="input"
-        name="email"
-        placeholder="popular_watering_hole@aol.com"
-        type="email"
-       />
-      </div>
-      {errors.email && <p className="help is-danger">{errors.email?.message}</p>}
+     {errors.name && <p className={classnames('help', 'is-danger')}>{errors.name?.message}</p>}
+    </div>
+    <div className="field">
+     <label className="label" htmlFor="account-email-input">
+      Primary Email
+     </label>
+     <div className="control">
+      <input id="account-email-input" ref={register} className="input" name="email" type="email" />
      </div>
-     <div className="field">
-      <label className="label" htmlFor="account-google-place-input">
-       Find your Google Place listing
-      </label>
-      <div className="control">
-       <GooglePlaceSelect onSelectSuggest={handleOnSelectSuggest} />
-      </div>
-      {errors.placeId && <p className="help is-danger">{errors.placeId?.message}</p>}
+     {errors.email && <p className={classnames('help', 'is-danger')}>{errors.email?.message}</p>}
+    </div>
+    <div className="field">
+     <label className="label" htmlFor="account-google-place-input">
+      Find your Google Place listing
+     </label>
+     <div className="control">
+      <GooglePlaceSelect onSelectSuggest={handleOnSelectSuggest} />
      </div>
-     <input ref={register} name="placeId" type="hidden" />
-     <div className="field">
-      <label className="label" htmlFor="account-owner-input">
-       Account Owner Name
-      </label>
-      <div className="control">
-       <input
-        id="account-owner-input"
-        ref={register}
-        className="input"
-        name="contactName"
-        placeholder="Joey Businessowner"
-        type="text"
-       />
-      </div>
-      {errors.contactName && <p className="help is-danger">{errors.contactName?.message}</p>}
+     {errors.placeId && (
+      <p className={classnames('help', 'is-danger')}>{errors.placeId?.message}</p>
+     )}
+    </div>
+    <input ref={register} name="placeId" type="hidden" />
+    <div className="field">
+     <label className="label" htmlFor="account-owner-input">
+      Account Owner Name
+     </label>
+     <div className="control">
+      <input
+       id="account-owner-input"
+       ref={register}
+       className="input"
+       name="contactName"
+       type="text"
+      />
      </div>
-     <div className="field">
-      <label className="label" htmlFor="account-phone-input">
-       Billing Phone Number
-      </label>
-      <div className="control">
-       <input
-        id="account-phone-input"
-        ref={register}
-        className="input"
-        name="phone"
-        placeholder="555-555-5555"
-        type="phone"
-       />
-      </div>
-      {errors.phone && <p className="help is-danger">{errors.phone?.message}</p>}
+     {errors.contactName && (
+      <p className={classnames('help', 'is-danger')}>{errors.contactName?.message}</p>
+     )}
+    </div>
+    <div className="field">
+     <label className="label" htmlFor="account-phone-input">
+      Billing Phone Number
+     </label>
+     <div className="control">
+      <input id="account-phone-input" ref={register} className="input" name="phone" type="phone" />
      </div>
-     <div className="field">
-      <label className="label" htmlFor="account-url-input">
-       Business URL
-      </label>
-      <div className="control">
-       <input
-        id="account-url-input"
-        ref={register}
-        className="input"
-        name="url"
-        placeholder="https://popularwateringhole.com"
-        type="text"
-       />
-      </div>
-      {errors.url && <p className="help is-danger">{errors.url?.message}</p>}
+     {errors.phone && <p className={classnames('help', 'is-danger')}>{errors.phone?.message}</p>}
+    </div>
+    <div className="field">
+     <label className="label" htmlFor="account-url-input">
+      Business URL
+     </label>
+     <div className="control">
+      <input id="account-url-input" ref={register} className="input" name="url" type="text" />
      </div>
-     <div className="field">
-      <div className="buttons">
-       <Link className="button" to="/">
-        Cancel
-       </Link>
-       <button className={`button is-info${isLoading ? ' is-loading' : ''}`} type="submit">
-        Create Account
-       </button>
-      </div>
-     </div>
-    </form>
+     {errors.url && <p className={classnames('help', 'is-danger')}>{errors.url?.message}</p>}
+    </div>
+    <button
+     className={classnames('button', 'is-primary', 'is-fullwidth', 'mt-4', {
+      'is-loading': isLoading,
+     })}
+     type="submit"
+    >
+     Create Account
+    </button>
+   </form>
+   <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
+    Any questions?{' '}
+    <Link className="has-text-primary" to="/contact">
+     Contact Us
+    </Link>
    </div>
   </div>
  );
