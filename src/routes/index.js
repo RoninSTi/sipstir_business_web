@@ -2,7 +2,10 @@ import React from 'react';
 import Auth from '@views/auth/auth.component';
 import Create from '@views/create/create.component';
 import Dashboard from '@views/dashboard/dashboard.component';
+import Forgot from '@views/forgot/forgot.component';
 import Login from '@views/login/login.component';
+import Reset from '@views/reset/reset.component';
+import Verify from '@views/verify/verify.component';
 
 // import AccountCreate from '@components/account-create/account-create.component';
 // import AccountOverview from '@components/account-overview/account-overview.component';
@@ -31,6 +34,18 @@ const routes = [
   path: '/dashboard',
   element: <Dashboard />,
  },
+ {
+  path: '/forgot',
+  element: <Forgot />,
+ },
+ {
+  path: '/reset',
+  element: <Reset />,
+ },
+ {
+  path: '/verify',
+  element: <Verify />,
+ },
  { path: '*', element: <NoMatch /> },
 ];
 
@@ -41,7 +56,7 @@ export default routes;
 <Route exact path="/auth" element={<Auth />} />
 <Route exact path="/login" element={<Login />} />
 <Route exact path="/create" element={<Create />} />
-<Route exact path="/verify" element={<Verify />} />
+
 <Route
  path="/"
  element={

@@ -8,43 +8,30 @@ import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@slices/auth';
-import { login as loginFn } from '@mutations/auth';
-import { getMe } from '@queries/user';
+import { useMutation } from 'react-query';
+import { forgot as forgotFn } from '@mutations/auth';
 
 import AuthBox from '@components/auth-box/auth-box.component';
 
 const schema = yup.object().shape({
  email: yup.string().email().required(),
- password: yup.string().required(),
 });
 
-const Login = () => {
+const Forgot = () => {
  const [cookies] = useCookies(['logged_in']);
 
- const dispatch = useDispatch();
  const navigate = useNavigate();
 
  const { register, handleSubmit, errors } = useForm({
   resolver: yupResolver(schema),
  });
 
- const query = useQuery('authUser', getMe, {
-  enabled: false,
-  select: (response) => response.data,
-  retry: 1,
-  onSuccess: (data) => {
-   dispatch(setUser(data));
-   navigate('/dashboard');
-  },
- });
+ const from = '/';
 
- const { mutate: login, isLoading } = useMutation((userData) => loginFn(userData), {
+ const { mutate: forgot, isLoading } = useMutation((userData) => forgotFn(userData), {
   onSuccess: () => {
-   query.refetch();
-   toast.success('You successfully logged in');
+   toast.success('Please check your email.');
+   navigate(from);
   },
   onError: (error) => {
    if (Array.isArray(error.response.data.error)) {
@@ -62,7 +49,7 @@ const Login = () => {
  });
 
  const onSubmit = (data) => {
-  login({ data });
+  forgot({ data });
  };
 
  if (cookies.logged_in) {
@@ -82,27 +69,16 @@ const Login = () => {
      {errors.email && <p className={classnames('help', 'is-danger')}>{errors.email?.message}</p>}
     </div>
 
-    <div className="field">
-     <label className="label" htmlFor="password">
-      Password
-     </label>
-     <div className="control">
-      <input className="input" id="password" name="password" ref={register} type="password" />
-     </div>
-     {errors.password && (
-      <p className={classnames('help', 'is-danger')}>{errors.password?.message}</p>
-     )}
-    </div>
     <button
      className={classnames('button', 'is-block', 'is-fullwidth', 'is-primary', {
       'is-loading': isLoading,
      })}
     >
-     Login
+     Send Link
     </button>
    </form>
   </AuthBox>
  );
 };
 
-export default Login;
+export default Forgot;

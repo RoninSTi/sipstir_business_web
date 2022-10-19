@@ -79,7 +79,7 @@ const Navbar = () => {
  const { mutate: logout } = useMutation(() => logoutFn(), {
   onSuccess: () => {
    dispatch(setUser(null));
-   navigate('/login');
+   navigate('/');
    toast.success('You successfully logged out');
   },
   onError: (error) => {
