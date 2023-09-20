@@ -30,7 +30,6 @@ export const logout = async () => {
 };
 
 export const reset = async ({ data }) => {
- console.log({ data });
  const response = await clients.default.client({
   method: 'post',
   url: 'auth/password/reset',

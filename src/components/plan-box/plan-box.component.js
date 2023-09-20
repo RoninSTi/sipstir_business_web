@@ -79,7 +79,7 @@ const PlanBox = (props) => {
 
  const account = useSelector((state) => state.account.activeAccount);
 
- const paymentMethod = useSelector((state) => state.paymentMethod.paymentMethod);
+ const paymentMethod = useSelector((state) => state.paymentMethod?.paymentMethod);
 
  const handleUpdatePaymentMethod = () => {
   dispatch({ type: SET_MODAL, payload: { activeModal: 'update-payment' } });

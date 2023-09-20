@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { updateAccountAction } from '@redux/actions/account';
+import { useMutation } from 'react-query';
+import { useGetAccounts } from '@hooks/queries';
+import { toast } from 'react-toastify';
+import { update as updateFn } from '@mutations/account';
 
 import GooglePhoto from '@components/google-photo/google-photo.component';
 import ImageUpload from '@components/image-upload/image-upload.component';
@@ -11,13 +12,18 @@ import useStyles from './account-box.style';
 const AccountBox = (props) => {
  const classes = useStyles(props);
 
- const dispatch = useDispatch();
-
  const [uploadProgress, setUploadProgress] = useState(0);
 
- const account = useSelector((state) => state.account.activeAccount);
+ const getAccounts = useGetAccounts();
 
- const token = useSelector((state) => state.auth.token);
+ const account = getAccounts.data?.[0];
+
+ const { mutate: update } = useMutation((accountData) => updateFn({ data: accountData }), {
+  onSuccess: () => {
+   getAccounts.refetch();
+   toast.success('Account updated');
+  },
+ });
 
  const handleOnComplete = ({ fileUrl }) => {
   const data = {
@@ -25,7 +31,7 @@ const AccountBox = (props) => {
    image: fileUrl,
   };
 
-  dispatch(updateAccountAction({ accountId: account?.id, token, ...data }));
+  update(data);
  };
 
  const handleOnProgress = ({ progress }) => {

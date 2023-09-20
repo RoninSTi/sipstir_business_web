@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { updateAccountAction } from '@redux/actions/account';
-import { UPDATE_ACCOUNT } from '@redux/actions/types';
+import classnames from 'classnames';
+import { useMutation } from 'react-query';
+import { useGetAccounts } from '@hooks/queries';
+import { update as updateFn } from '@mutations/account';
+import { toast } from 'react-toastify';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
@@ -21,15 +22,19 @@ const schema = yup.object().shape({
 const ProfileBox = (props) => {
  const classes = useStyles(props);
 
- const dispatch = useDispatch();
+ const getAccounts = useGetAccounts();
 
- const account = useSelector((state) => state.account.activeAccount);
+ const account = getAccounts.data?.[0];
 
- const isLoading = useSelector((state) =>
-  state.ui.isLoading.some((element) => element.loadingType === UPDATE_ACCOUNT),
+ const { mutate: update, isLoading } = useMutation(
+  (accountData) => updateFn({ data: accountData }),
+  {
+   onSuccess: () => {
+    getAccounts.refetch();
+    toast.success('Account updated');
+   },
+  },
  );
-
- const token = useSelector((state) => state.auth.token);
 
  const { register, handleSubmit, errors, setValue } = useForm({
   resolver: yupResolver(schema),
@@ -47,7 +52,10 @@ const ProfileBox = (props) => {
  }, [account, setValue]);
 
  const onSubmit = (data) => {
-  let accountData = data;
+  let accountData = {
+   ...data,
+   id: account.id,
+  };
 
   if (data.image === '') {
    accountData = {
@@ -56,15 +64,15 @@ const ProfileBox = (props) => {
    };
   }
 
-  dispatch(updateAccountAction({ accountId: account?.id, ...accountData, token }));
+  update(accountData);
  };
 
  return (
   <div className="container">
-   <h5 className={`title is-5 ${classes.boxTitle}`}>Profile</h5>
+   <h5 className={classnames('title', 'is-5', classes.boxTitle)}>Profile</h5>
    <form onSubmit={handleSubmit(onSubmit)}>
     <div className="columns">
-     <div className="column is-one-half">
+     <div className={classnames('column', 'is-one-half')}>
       <div className="field">
        <label className="label" htmlFor="phone-input">
         Phone
@@ -79,10 +87,10 @@ const ProfileBox = (props) => {
          type="phone"
         />
        </div>
-       {errors.phone && <p className="help is-danger">{errors.phone?.message}</p>}
+       {errors.phone && <p className={classnames('help', 'is-danger')}>{errors.phone?.message}</p>}
       </div>
      </div>
-     <div className="column is-one-half">
+     <div className={classnames('column', 'is-one-half')}>
       <div className="field">
        <label className="label" htmlFor="email-input">
         Email
@@ -97,7 +105,7 @@ const ProfileBox = (props) => {
          type="email"
         />
        </div>
-       {errors.phone && <p className="help is-danger">{errors.phone?.message}</p>}
+       {errors.phone && <p className={classnames('help', 'is-danger')}>{errors.phone?.message}</p>}
       </div>
      </div>
     </div>
@@ -117,11 +125,11 @@ const ProfileBox = (props) => {
          type="text"
         />
        </div>
-       {errors.url && <p className="help is-danger">{errors.url?.message}</p>}
+       {errors.url && <p className={classnames('help', 'is-danger')}>{errors.url?.message}</p>}
       </div>
      </div>
     </div>
-    <button className={`button is-info${isLoading ? ' is-loading' : ''}`} type="submit">
+    <button className={classnames('button', 'is-info', { 'is-loading': isLoading })} type="submit">
      Update Profile
     </button>
    </form>

@@ -7,12 +7,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@slices/auth';
+import { useMutation } from 'react-query';
 import { login as loginFn } from '@mutations/auth';
-import { getMe } from '@queries/user';
+import { useGetMe } from '@hooks/queries';
 
 import AuthBox from '@components/auth-box/auth-box.component';
 
@@ -24,40 +21,16 @@ const schema = yup.object().shape({
 const Login = () => {
  const [cookies] = useCookies(['logged_in']);
 
- const dispatch = useDispatch();
- const navigate = useNavigate();
-
  const { register, handleSubmit, errors } = useForm({
   resolver: yupResolver(schema),
  });
 
- const query = useQuery('authUser', getMe, {
-  enabled: false,
-  select: (response) => response.data,
-  retry: 1,
-  onSuccess: (data) => {
-   dispatch(setUser(data));
-   navigate('/dashboard');
-  },
- });
+ const query = useGetMe();
 
  const { mutate: login, isLoading } = useMutation((userData) => loginFn(userData), {
   onSuccess: () => {
    query.refetch();
    toast.success('You successfully logged in');
-  },
-  onError: (error) => {
-   if (Array.isArray(error.response.data.error)) {
-    error.response.data.error.forEach((el) =>
-     toast.error(el.message, {
-      position: 'top-right',
-     }),
-    );
-   } else {
-    toast.error(error.response.data.message, {
-     position: 'top-right',
-    });
-   }
   },
  });
 
@@ -65,7 +38,7 @@ const Login = () => {
   login({ data });
  };
 
- if (cookies.logged_in) {
+ if (cookies.logged_in || query.isSuccess) {
   return <Navigate to="/dashboard" />;
  }
 

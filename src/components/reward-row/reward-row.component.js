@@ -43,7 +43,7 @@ const RewardRow = ({ reward }) => {
    <td>{isActive ? 'Active' : 'Inactive'}</td>
    <td>
     <div className="buttons" style={{ justifyContent: 'flex-end' }}>
-     <Link className="button is-small" to={`/rewards/${id}`}>
+     <Link className="button is-small" to={`/dashboard/rewards/${id}`}>
       Edit
      </Link>
      <button

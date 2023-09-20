@@ -38,8 +38,8 @@ const AdminItems = () => {
     className={({ isActive }) =>
      `navbar-item has-text-weight-bold is-size-6${isActive ? ' is-active' : ''}`
     }
-    exact="true"
-    to="/"
+    end
+    to="/dashboard"
    >
     Overview
    </NavLink>
@@ -47,7 +47,7 @@ const AdminItems = () => {
     className={({ isActive }) =>
      `navbar-item has-text-weight-bold is-size-6${isActive ? ' is-active' : ''}`
     }
-    to="/rewards"
+    to="/dashboard/rewards"
    >
     Rewards
    </NavLink>
@@ -55,7 +55,7 @@ const AdminItems = () => {
     className={({ isActive }) =>
      `navbar-item has-text-weight-bold is-size-6${isActive ? ' is-active' : ''}`
     }
-    to="/my-account"
+    to="/dashboard/account"
    >
     My Account
    </NavLink>
@@ -81,19 +81,6 @@ const Navbar = () => {
    dispatch(setUser(null));
    navigate('/');
    toast.success('You successfully logged out');
-  },
-  onError: (error) => {
-   if (Array.isArray(error.response.data.error)) {
-    error.response.data.error.forEach((el) =>
-     toast.error(el.message, {
-      position: 'top-right',
-     }),
-    );
-   } else {
-    toast.error(error.response.data.message, {
-     position: 'top-right',
-    });
-   }
   },
  });
 

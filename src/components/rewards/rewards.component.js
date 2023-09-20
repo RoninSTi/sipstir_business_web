@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { useSelector } from 'react-redux';
-
 import { Link } from 'react-router-dom';
+import { useGetAccounts, useGetRewards } from '@hooks/queries';
 
 import useStyles from './rewards.style';
 
@@ -13,7 +12,13 @@ import RewardRow from '@components/reward-row/reward-row.component';
 const Rewards = () => {
  const classes = useStyles();
 
- const rewards = useSelector((state) => state.rewards.rewards);
+ const getAccounts = useGetAccounts();
+
+ const accountId = getAccounts.data?.[0]?.id;
+
+ const getRewards = useGetRewards({ accountId });
+
+ const rewards = getRewards.data || [];
 
  return (
   <div>
@@ -27,7 +32,10 @@ const Rewards = () => {
      </div>
      <div className="level-right">
       <div className="level-item">
-       <Link className="button is-normal is-info has-text-weight-semibold" to="/rewards/create">
+       <Link
+        className="button is-normal is-info has-text-weight-semibold"
+        to="/dashboard/rewards/create"
+       >
         Add New Reward
        </Link>
       </div>

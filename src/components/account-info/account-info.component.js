@@ -1,25 +1,28 @@
 import React from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { SET_REDIRECT } from '@redux/actions/types';
-
 import AccountInfoBlock from '@components/account-info-block/account-info-block.component';
 import GooglePhoto from '@components/google-photo/google-photo.component';
 import NoAccount from '@components/no-account/no-account.component';
 
 import useStyles from './account-info.style';
+import { useGetAccounts, useGetRewards } from '@hooks/queries';
+import { useNavigate } from 'react-router-dom';
 
 const AccountInfo = () => {
  const classes = useStyles();
 
- const dispatch = useDispatch();
+ const getAccounts = useGetAccounts();
 
- const account = useSelector((state) => state.account.activeAccount);
+ const account = getAccounts.data?.[0];
 
- const numRewards = useSelector((state) => state.rewards.rewards.length);
+ const getRewards = useGetRewards({ accountId: account?.id });
+
+ const numRewards = getRewards.data?.length;
+
+ const navigate = useNavigate();
 
  const handleOnClickRewards = () => {
-  dispatch({ type: SET_REDIRECT, payload: '/rewards' });
+  navigate('/dashboard/rewards');
  };
 
  // const handleOnClickPlan = () => {

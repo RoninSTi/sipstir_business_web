@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { CREATE_REWARD } from '@actions/types';
-import { createRewardAction, updateRewardAction } from '@actions/rewards';
-
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import PageHeader from '@components/page-header/page-header.component';
-import { UPDATE_REWARD } from '../../redux/actions/types';
+import { create as createFn, update as updateFn } from '@mutations/rewards';
+import { toast } from 'react-toastify';
+import { useGetAccounts, useGetRewards } from '@hooks/queries';
+import { useMutation } from 'react-query';
 
 const schema = yup.object().shape({
  isActive: yup.boolean().required(),
@@ -20,18 +18,46 @@ const schema = yup.object().shape({
  title: yup.string().required(),
 });
 
-const AccountCreate = () => {
- const dispatch = useDispatch();
+const RewardCreate = () => {
+ const { rewardId } = useParams();
+
+ const navigate = useNavigate();
+
+ const getAccounts = useGetAccounts();
+
+ const accountId = getAccounts.data?.[0]?.id;
+
+ const getRewards = useGetRewards({ accountId });
+
+ const { mutate: create, isLoading: isLoadingCreate } = useMutation(
+  (rewardData) => createFn({ data: rewardData }),
+  {
+   onSuccess: () => {
+    getRewards.refetch();
+    toast.success('Reward created');
+    navigate('/dashboard/rewards');
+   },
+  },
+ );
+
+ const { mutate: update, isLoading: isLoadingUpdate } = useMutation(
+  (rewardData) => updateFn({ data: rewardData, rewardId }),
+  {
+   onSuccess: () => {
+    getRewards.refetch();
+    toast.success('Reward updated');
+    navigate('/dashboard/rewards');
+   },
+  },
+ );
+
+ const isLoading = isLoadingCreate || isLoadingUpdate;
 
  const { register, handleSubmit, errors, setValue } = useForm({
   resolver: yupResolver(schema),
  });
 
- const { rewardId } = useParams();
-
- const reward = useSelector((state) =>
-  state.rewards.rewards.find((rwd) => rwd.id === parseInt(rewardId, 10)),
- );
+ const reward = getRewards.data?.find((rwd) => rwd.id === parseInt(rewardId, 10));
 
  useEffect(() => {
   if (reward) {
@@ -44,21 +70,15 @@ const AccountCreate = () => {
   }
  }, [reward, setValue]);
 
- const isLoading = useSelector((state) =>
-  state.ui.isLoading.some(
-   (item) => item.loadingType === CREATE_REWARD || item.loadingType === UPDATE_REWARD,
-  ),
- );
-
- const token = useSelector((state) => state.auth.token);
-
- const accountId = useSelector((state) => state.account.activeAccount?.id);
-
  const onSubmit = (data) => {
-  const action = reward
-   ? updateRewardAction({ ...data, rewardId, token })
-   : createRewardAction({ accountId, ...data, token });
-  dispatch(action);
+  if (!accountId) return;
+
+  const rewardData = {
+   ...data,
+   accountId,
+  };
+
+  reward ? update(rewardData) : create(rewardData);
  };
 
  return (
@@ -123,7 +143,7 @@ const AccountCreate = () => {
      </div>
      <div className="field">
       <div className="buttons mt-2">
-       <Link className="button" to="/rewards">
+       <Link className="button" to="/dashboard/rewards">
         Cancel
        </Link>
        <button className={`button is-info${isLoading ? ' is-loading' : ''}`} type="submit">
@@ -137,4 +157,4 @@ const AccountCreate = () => {
  );
 };
 
-export default AccountCreate;
+export default RewardCreate;

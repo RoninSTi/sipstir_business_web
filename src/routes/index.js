@@ -7,13 +7,10 @@ import Login from '@views/login/login.component';
 import Reset from '@views/reset/reset.component';
 import Verify from '@views/verify/verify.component';
 
-// import AccountCreate from '@components/account-create/account-create.component';
-// import AccountOverview from '@components/account-overview/account-overview.component';
-// import Accounts from '@components/accounts/accounts.component';
-// import Businesses from '@components/businesses/businesses.component';
-// import MyAccount from '@components/my-account/my-account.component';
-// import Rewards from '@components/rewards/rewards.component';
-// import RewardCreate from '@components/reward-create/reward-create.component';
+import AccountOverview from '@components/account-overview/account-overview.component';
+import MyAccount from '@components/my-account/my-account.component';
+import Rewards from '@components/rewards/rewards.component';
+import RewardCreate from '@components/reward-create/reward-create.component';
 
 const NoMatch = () => <div>No Route</div>;
 
@@ -32,7 +29,32 @@ const routes = [
  },
  {
   path: '/dashboard',
+  exact: true,
   element: <Dashboard />,
+  children: [
+   {
+    path: '',
+    element: <AccountOverview />,
+   },
+   {
+    path: 'account',
+    element: <MyAccount />,
+   },
+   {
+    path: 'rewards',
+    element: <Rewards />,
+   },
+   {
+    path: 'rewards/create',
+    exact: true,
+    element: <RewardCreate />,
+   },
+   {
+    path: 'rewards/:rewardId',
+    exact: true,
+    element: <RewardCreate />,
+   },
+  ],
  },
  {
   path: '/forgot',

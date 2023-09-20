@@ -2,7 +2,6 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 3.81
 # Copyright (C) 2006  Free Software Foundation, Inc.
 # This is free software; see the source for copying conditions.
- 
 # There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
@@ -11,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Thu Jul 28 11:58:00 2022
+# Make data base, printed on Tue Sep 19 10:49:40 2023
 
 # Variables
 
@@ -19,6 +18,8 @@ make: *** No rule to make target `all'.  Stop.
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
+# environment
+VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -30,7 +31,7 @@ CURDIR := /Users/craigcronin/Development/sipstir_business_web
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"en-us","osLocale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
 # makefile (from `Makefile', line 1)
@@ -40,15 +41,15 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 VSCODE_CWD = /
 # environment
-PATH = /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+PATH = /usr/bin:/bin:/usr/sbin:/sbin
 # environment
-LaunchInstanceID = 33DAE391-C3D6-4FA8-AA92-46E6B30FB1EA
+LaunchInstanceID = FFCBCBB0-6A60-4850-A67B-44CE7260A98C
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.Jq2vo1T7pB/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.V8xviXS26h/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -56,13 +57,15 @@ PWD = /Users/craigcronin/Development/sipstir_business_web
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
+MANPATH = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man:
+# environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /Users/craigcronin
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/craigcronin/Library/Application Support/Code/CachedData/3b889b090b5ad5793f524b5d1d39fda662b96a2a
+VSCODE_CODE_CACHE_PATH = /Users/craigcronin/Library/Application Support/Code/CachedData/74f6148eb9ea00507ec113ec51c489d6ffb4b771
 # environment
 LOGNAME = craigcronin
 # environment
@@ -96,7 +99,7 @@ TMPDIR = /var/folders/6z/dvh_trnj2l33f7yxdyyzwpbc0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/craigcronin/Library/Application Support/Code/1.69.2-main.sock
+VSCODE_IPC_HOOK = /Users/craigcronin/Library/Application Support/Code/1.80-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -106,7 +109,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.104340875.104340882
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.115229013.115229019
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -122,7 +125,7 @@ MAKEFILES :=
 # environment
 LC_ALL = C
 # environment
-SECURITYSESSIONID = 186a4
+SECURITYSESSIONID = 186a5
 # automatic
 ^F = $(notdir $^)
 # default
@@ -134,9 +137,9 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 427
+VSCODE_PID = 441
 # variable set hash-table stats:
-# Load=60/1024=6%, Rehash=0, Collisions=1/84=1%
+# Load=62/1024=6%, Rehash=0, Collisions=1/86=1%
 
 # Pattern-specific Variable Values
 
@@ -161,7 +164,6 @@ deploy-prod:
 #  commands to execute (from `Makefile', line 12):
 	git push prod master
 	
- 
 
 # Not a target:
 all:
@@ -244,6 +246,6 @@ set-staging-environment:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Thu Jul 28 11:58:00 2022
+# Finished Make data base on Tue Sep 19 10:49:40 2023
 
  
