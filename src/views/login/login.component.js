@@ -21,7 +21,7 @@ const schema = yup.object().shape({
 const Login = () => {
  const [cookies] = useCookies(['logged_in']);
 
- const { register, handleSubmit, errors } = useForm({
+ const { register, handleSubmit, errors, reset, getValues } = useForm({
   resolver: yupResolver(schema),
  });
 
@@ -31,6 +31,12 @@ const Login = () => {
   onSuccess: () => {
    query.refetch();
    toast.success('You successfully logged in');
+  },
+  onError: () => {
+   reset({
+    email: getValues('email'),
+    password: '',
+   });
   },
  });
 

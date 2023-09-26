@@ -14,24 +14,26 @@ const AuthBox = ({ children }) => {
   <section className={classnames('hero', 'is-fullheight', classes.hero)}>
    <div className="hero-body">
     <div className="container">
-     <div className={classnames('column', 'is-4', 'is-offset-4')}>
-      <div className="box">
-       <figure className={classes.logo}>
-        <img src={LOGO_TEXT} alt="logo" />
-       </figure>
-       {children}
-       <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
-        Don&rsquo;t have an account?{' '}
-        <Link className="has-text-primary" to="/create">
-         Sign Up Now
-        </Link>
-       </div>
-       <hr />
-       <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
-        Any questions?{' '}
-        <Link className="has-text-primary" to="/contact">
-         Contact Us
-        </Link>
+     <div className={classnames('columns', 'is-centered')}>
+      <div className={classnames('column', 'is-one-third')}>
+       <div className="box">
+        <figure className={classes.logo}>
+         <img src={LOGO_TEXT} alt="logo" />
+        </figure>
+        {children}
+        <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
+         Don&rsquo;t have an account?{' '}
+         <Link className="has-text-primary" to="/create">
+          Sign Up Now
+         </Link>
+        </div>
+        <hr />
+        <div className={classnames('has-text-centered', 'mt-4', 'has-text-weight-medium')}>
+         Any questions?{' '}
+         <Link className="has-text-primary" to="/contact">
+          Contact Us
+         </Link>
+        </div>
        </div>
       </div>
      </div>

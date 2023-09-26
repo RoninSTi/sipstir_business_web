@@ -36,20 +36,7 @@ const AccountCreate = () => {
  const { mutate: create, isLoading } = useMutation((accountData) => createFn(accountData), {
   onSuccess: () => {
    toast.success('You successfully created your account.  Check your email to verify and login.');
-   navigate('/auth');
-  },
-  onError: (error) => {
-   if (Array.isArray(error.response.data.error)) {
-    error.response.data.error.forEach((el) =>
-     toast.error(el.message, {
-      position: 'top-right',
-     }),
-    );
-   } else {
-    toast.error(error.response.data.message, {
-     position: 'top-right',
-    });
-   }
+   navigate('/');
   },
  });
 
@@ -72,7 +59,7 @@ const AccountCreate = () => {
    <form onSubmit={handleSubmit(onSubmit)}>
     <div className="field">
      <label className="label" htmlFor="account-name-input">
-      Account Name
+      Business Name
      </label>
      <div className="control">
       <input id="account-name-input" ref={register} className="input" name="name" type="text" />

@@ -11,8 +11,8 @@ export const useGetAccounts = () => {
 
 export const useGetMe = () => {
  return useQuery(queries.user.me, getMe, {
+  enabled: false,
   select: (response) => response.data,
-  retry: 1,
  });
 };
 

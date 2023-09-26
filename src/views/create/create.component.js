@@ -11,8 +11,10 @@ const Create = () => {
   <section className={classnames('hero', 'is-fullheight', classes.hero)}>
    <div className="hero-body">
     <div className="container">
-     <div className={classnames('column', 'is-4', 'is-offset-4')}>
-      <AccountCreate />
+     <div className={classnames('columns', 'is-centered')}>
+      <div className={classnames('column', 'is-half')}>
+       <AccountCreate />
+      </div>
      </div>
     </div>
    </div>

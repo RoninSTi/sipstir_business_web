@@ -72,33 +72,3 @@ const routes = [
 ];
 
 export default routes;
-
-{
- /* <Routes>
-<Route exact path="/auth" element={<Auth />} />
-<Route exact path="/login" element={<Login />} />
-<Route exact path="/create" element={<Create />} />
-
-<Route
- path="/"
- element={
-  <AuthUserRequired>
-   <Dashboard />
-  </AuthUserRequired>
- }
-/>
-</Routes> */
-}
-
-{
- /* <Routes>
-<Route index element={isEmployee ? <Businesses /> : <AccountOverview />} />
-<Route path="rewards" element={<Rewards />} />
-<Route path="accounts/create" element={<AccountCreate />} />
-<Route path="accounts/:accountId" element={<AccountCreate />} />={' '}
-<Route path="accounts" element={<Accounts />} />
-<Route path="my-account" element={<MyAccount />} />
-<Route path="rewards/create" element={<RewardCreate />} />
-<Route path="rewards/:rewardId" element={<RewardCreate />} />
-</Routes> */
-}
