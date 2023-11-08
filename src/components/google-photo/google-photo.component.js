@@ -14,6 +14,8 @@ const GooglePhoto = ({ photoreference, size }) => {
 
  const classes = useStyles({ size, url });
 
+ if (!photoreference) return null;
+
  return (
   <figure className={`image ${classes.container}`}>
    <div className={classes.image} />

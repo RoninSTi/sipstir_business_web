@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { createSubscriptionAction, getProductsAction } from '@actions/product';
-import { CLEAR_MODAL, CREATE_SUBSCRIPTION, SET_PRICE } from '@redux/actions/types';
+import { createSubscriptionAction } from '@actions/product';
+import { CLEAR_MODAL, CREATE_SUBSCRIPTION } from '@redux/actions/types';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import useStyles from './subscription-modal.style';
 
 import CardSection from '@components/card-section/card-section.component';
+import { useGetProducts } from '@hooks/queries';
 
 const SubscriptionModal = (props) => {
  const classes = useStyles(props);
@@ -19,17 +20,23 @@ const SubscriptionModal = (props) => {
 
  const account = useSelector((state) => state.account.activeAccount);
 
+ const [selectedPrice, setSelectedPrice] = useState(null);
+
+ const [prices, setPrices] = useState([]);
+
+ const { data } = useGetProducts();
+
+ useEffect(() => {
+  setPrices(data?.[0]?.prices);
+ }, [data]);
+
  const stripe = useStripe();
 
  const elements = useElements();
 
  const customerId = useSelector((state) => state.account.activeAccount?.stripeCustomerId);
 
- const selectedPrice = useSelector((state) => state.product.selectedPrice);
-
  const token = useSelector((state) => state.auth.token);
-
- const prices = useSelector((state) => state.product?.products[0]?.prices);
 
  const isLoading = useSelector((state) =>
   state.ui.isLoading.some((element) => element.loadingType === CREATE_SUBSCRIPTION),
@@ -57,17 +64,6 @@ const SubscriptionModal = (props) => {
    });
   }
  }, [cardElement, errors, setErrors]);
-
- const handleSelectPrice = (price) => {
-  dispatch({
-   type: SET_PRICE,
-   payload: price,
-  });
- };
-
- useEffect(() => {
-  dispatch(getProductsAction({ token }));
- }, [dispatch, token]);
 
  const handleSubmit = async (e) => {
   e.preventDefault();
@@ -142,7 +138,7 @@ const SubscriptionModal = (props) => {
             <div className={classes.offerText}>$1000 / Year</div>
             <button
              className={`button is-info${selectedPrice === prices[1] ? ' is-outlined' : ''}`}
-             onClick={() => handleSelectPrice(prices[0])}
+             onClick={() => setSelectedPrice(prices[0])}
             >
              Select Yearly
             </button>
@@ -158,7 +154,7 @@ const SubscriptionModal = (props) => {
             <div className={classes.offerText}>$100 / Month</div>
             <button
              className={`button is-info${selectedPrice === prices[0] ? ' is-outlined' : ''}`}
-             onClick={() => handleSelectPrice(prices[1])}
+             onClick={() => setSelectedPrice(prices[1])}
             >
              Select Monthly
             </button>
