@@ -22,7 +22,6 @@ const schema = yup.object().shape({
  contactName: yup.string().required(),
  phone: yup.string().phone().required(),
  url: yup.string().url().required(),
- password: yup.string().required(),
 });
 
 const AccountCreate = () => {
@@ -73,21 +72,6 @@ const AccountCreate = () => {
      </label>
      <div className="control">
       <input id="account-email-input" ref={register} className="input" name="email" type="email" />
-     </div>
-     {errors.email && <p className={classnames('help', 'is-danger')}>{errors.email?.message}</p>}
-    </div>
-    <div className="field">
-     <label className="label" htmlFor="account-password-input">
-      Password
-     </label>
-     <div className="control">
-      <input
-       id="account-password-input"
-       ref={register}
-       className="input"
-       name="password"
-       type="password"
-      />
      </div>
      {errors.email && <p className={classnames('help', 'is-danger')}>{errors.email?.message}</p>}
     </div>
