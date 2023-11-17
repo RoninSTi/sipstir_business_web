@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { createSubscriptionAction } from '@actions/product';
-import { CLEAR_MODAL, CREATE_SUBSCRIPTION } from '@redux/actions/types';
+import { CLEAR_MODAL } from '@redux/actions/types';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import useStyles from './subscription-modal.style';
 
 import CardSection from '@components/card-section/card-section.component';
-import { useGetProducts } from '@hooks/queries';
+import { useGetAccounts, useGetProducts } from '@hooks/queries';
+import { toast } from 'react-toastify';
+import { useCreateSubscription } from '@hooks/mutations';
 
 const SubscriptionModal = (props) => {
  const classes = useStyles(props);
@@ -18,34 +19,30 @@ const SubscriptionModal = (props) => {
 
  const isActive = useSelector((state) => state.modals.activeModal === 'subscription');
 
- const account = useSelector((state) => state.account.activeAccount);
+ const { data: account } = useGetAccounts();
 
  const [selectedPrice, setSelectedPrice] = useState(null);
 
  const [prices, setPrices] = useState([]);
 
- const { data } = useGetProducts();
+ const { data: products } = useGetProducts();
 
  useEffect(() => {
-  setPrices(data?.[0]?.prices);
- }, [data]);
+  const prices = products?.[0]?.prices;
+  setPrices(prices);
+  setSelectedPrice(prices?.[0]);
+ }, [products]);
 
  const stripe = useStripe();
 
  const elements = useElements();
 
- const customerId = useSelector((state) => state.account.activeAccount?.stripeCustomerId);
-
- const token = useSelector((state) => state.auth.token);
-
- const isLoading = useSelector((state) =>
-  state.ui.isLoading.some((element) => element.loadingType === CREATE_SUBSCRIPTION),
- );
-
  const cardElement = elements?.getElement(CardElement);
 
  const [errors, setErrors] = useState({});
  const [cardComplete, setCardComplete] = useState(false);
+
+ const { mutate: createSubscription, isLoading } = useCreateSubscription();
 
  useEffect(() => {
   if (cardElement) {
@@ -74,19 +71,18 @@ const SubscriptionModal = (props) => {
   });
 
   if (error) {
-   console.log({ error });
+   toast.error(error.message);
    return;
   }
 
-  dispatch(
-   createSubscriptionAction({
+  createSubscription({
+   data: {
     accountId: account?.id,
-    customerId: customerId,
+    customerId: account?.stripeCustomerId,
     paymentMethodId: paymentMethod.id,
     priceId: selectedPrice.id,
-    token,
-   }),
-  );
+   },
+  });
  };
 
  const handleOnCancel = () => {
@@ -140,7 +136,7 @@ const SubscriptionModal = (props) => {
              className={`button is-info${selectedPrice === prices[1] ? ' is-outlined' : ''}`}
              onClick={() => setSelectedPrice(prices[0])}
             >
-             Select Yearly
+             {selectedPrice === prices[0] ? 'Selected' : 'Select Yearly'}
             </button>
            </div>
           </div>
@@ -156,7 +152,7 @@ const SubscriptionModal = (props) => {
              className={`button is-info${selectedPrice === prices[0] ? ' is-outlined' : ''}`}
              onClick={() => setSelectedPrice(prices[1])}
             >
-             Select Monthly
+             {selectedPrice === prices[1] ? 'Selected' : 'Select Monthly'}
             </button>
            </div>
           </div>

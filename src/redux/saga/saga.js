@@ -4,7 +4,6 @@ import { watchAccount } from './account';
 import { watchAuth } from './auth';
 import { watchPaymentMethod } from './paymentMethod';
 import { watchProduct } from './product';
-import { watchRewards } from './rewards';
 import { watchSubscription } from './subscription';
 import { watchUI } from './ui';
 import { watchUser } from './user';
@@ -15,7 +14,6 @@ export default function* rootSaga() {
   watchAuth(),
   watchPaymentMethod(),
   watchProduct(),
-  watchRewards(),
   watchSubscription(),
   watchUI(),
   watchUser(),

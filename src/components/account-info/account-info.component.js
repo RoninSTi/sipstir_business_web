@@ -5,15 +5,15 @@ import GooglePhoto from '@components/google-photo/google-photo.component';
 import NoAccount from '@components/no-account/no-account.component';
 
 import useStyles from './account-info.style';
-import { useGetAccounts, useGetRewards } from '@hooks/queries';
+import { useGetAccounts, useGetRewards, useGetPaymentMethod } from '@hooks/queries';
 import { useNavigate } from 'react-router-dom';
 
 const AccountInfo = () => {
  const classes = useStyles();
 
- const getAccounts = useGetAccounts();
+ const { data: account } = useGetAccounts();
 
- const account = getAccounts.data?.[0];
+ const { data: paymentMethod } = useGetPaymentMethod({ accountId: account?.id });
 
  const getRewards = useGetRewards({ accountId: account?.id });
 
@@ -25,9 +25,9 @@ const AccountInfo = () => {
   navigate('/dashboard/rewards');
  };
 
- // const handleOnClickPlan = () => {
- //   dispatch({ type: SET_REDIRECT, payload: '/subscription' })
- // }
+ const handleOnClickPlan = () => {
+  navigate('/dashboard/account');
+ };
 
  return account ? (
   <div className={`box ${classes.box}`}>
@@ -71,12 +71,22 @@ const AccountInfo = () => {
         subtitle="Rewards"
         title={`${numRewards}`}
        />
-       {/* <AccountInfoBlock
-                buttonTitle='Manage'
-                onClick={handleOnClickPlan}
-                subtitle='Payment Method'
-                title='Visa'
-              /> */}
+       {paymentMethod && (
+        <AccountInfoBlock
+         buttonTitle="Manage"
+         onClick={handleOnClickPlan}
+         subtitle="Payment Method"
+         title={`${paymentMethod?.brand} - ${paymentMethod?.last4}`}
+        />
+       )}
+       {!paymentMethod && (
+        <AccountInfoBlock
+         buttonTitle="Subscribe"
+         onClick={handleOnClickPlan}
+         subtitle="No Plan"
+         title="Rewards Inactive"
+        />
+       )}
       </div>
      </div>
     </div>

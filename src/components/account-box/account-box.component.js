@@ -14,13 +14,10 @@ const AccountBox = (props) => {
 
  const [uploadProgress, setUploadProgress] = useState(0);
 
- const getAccounts = useGetAccounts();
-
- const account = getAccounts.data?.[0];
+ const { data: account } = useGetAccounts();
 
  const { mutate: update } = useMutation((accountData) => updateFn({ data: accountData }), {
   onSuccess: () => {
-   getAccounts.refetch();
    toast.success('Account updated');
   },
  });

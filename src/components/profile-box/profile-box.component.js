@@ -22,15 +22,12 @@ const schema = yup.object().shape({
 const ProfileBox = (props) => {
  const classes = useStyles(props);
 
- const getAccounts = useGetAccounts();
-
- const account = getAccounts.data?.[0];
+ const { data: account } = useGetAccounts();
 
  const { mutate: update, isLoading } = useMutation(
   (accountData) => updateFn({ data: accountData }),
   {
    onSuccess: () => {
-    getAccounts.refetch();
     toast.success('Account updated');
    },
   },

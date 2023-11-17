@@ -12,9 +12,9 @@ import RewardRow from '@components/reward-row/reward-row.component';
 const Rewards = () => {
  const classes = useStyles();
 
- const getAccounts = useGetAccounts();
+ const { data: account } = useGetAccounts();
 
- const accountId = getAccounts.data?.[0]?.id;
+ const accountId = account?.id;
 
  const getRewards = useGetRewards({ accountId });
 

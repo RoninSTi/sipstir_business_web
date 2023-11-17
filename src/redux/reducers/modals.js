@@ -4,6 +4,7 @@ const initialState = {
  activeModal: null,
  dispatchOnClose: null,
  title: '',
+ triggerOnClose: null,
  message: '',
 };
 

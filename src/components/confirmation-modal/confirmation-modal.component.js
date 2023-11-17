@@ -9,12 +9,21 @@ const ConfirmationModal = () => {
 
  const isActive = useSelector((state) => state.modals.activeModal === 'confirmation');
 
- const { message, title, dispatchOnClose: action } = useSelector((state) => state.modals);
+ const {
+  message,
+  title,
+  dispatchOnClose: action,
+  triggerOnClose: trigger,
+ } = useSelector((state) => state.modals);
 
  const handleConfirmation = () => {
   if (action) {
    //  dispatch(action);
    action();
+  }
+
+  if (trigger) {
+   trigger();
   }
 
   dispatch({ type: CLEAR_MODAL });

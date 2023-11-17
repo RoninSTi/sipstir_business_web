@@ -1,30 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { CANCEL_SUBSCRIPTION, SET_MODAL } from '@actions/types';
-import { cancelSubscriptionAction } from '@actions/subscription';
+import { useDispatch } from 'react-redux';
+import { SET_MODAL } from '@actions/types';
 
 import moment from 'moment';
 
 import useStyles from './plan-box.style';
+import { useGetAccounts, useGetPaymentMethod, useGetSubscription } from '@hooks/queries';
+import { useDestroySubscription } from '@hooks/mutations';
 
-const PlanActive = () => {
+const PlanActive = ({ accountId }) => {
  const dispatch = useDispatch();
 
- const subscription = useSelector((state) => state.subscription.subscription);
+ const { data: subscription } = useGetSubscription({ accountId });
 
- const isLoading = useSelector((state) =>
-  state.ui.isLoading.some((element) => element.loadingType === CANCEL_SUBSCRIPTION),
- );
-
- const token = useSelector((state) => state.auth.token);
+ const { mutate: destroy, isLoading } = useDestroySubscription();
 
  const handleOnClickCancel = () => {
   dispatch({
    type: SET_MODAL,
    payload: {
     activeModal: 'confirmation',
-    dispatchOnClose: cancelSubscriptionAction({ subscriptionId: subscription.id, token }),
+    triggerOnClose: () => destroy({ subscriptionId: subscription.id }),
     message: 'You will no longer have access to the subscriber perks.',
     title: 'Cancel Subscription?',
    },
@@ -47,6 +45,10 @@ const PlanActive = () => {
    </button>
   </div>
  );
+};
+
+PlanActive.propTypes = {
+ accountId: PropTypes.number,
 };
 
 const PlanInactive = () => {
@@ -77,9 +79,9 @@ const PlanBox = (props) => {
 
  const dispatch = useDispatch();
 
- const account = useSelector((state) => state.account.activeAccount);
+ const { data: account } = useGetAccounts();
 
- const paymentMethod = useSelector((state) => state.paymentMethod?.paymentMethod);
+ const { data: paymentMethod } = useGetPaymentMethod({ accountId: account?.id });
 
  const handleUpdatePaymentMethod = () => {
   dispatch({ type: SET_MODAL, payload: { activeModal: 'update-payment' } });
@@ -88,9 +90,9 @@ const PlanBox = (props) => {
  return (
   <div className="container">
    <h5 className={`title is-5 ${classes.boxTitle}`}>Plan</h5>
-   {account?.isActive ? <PlanActive /> : <PlanInactive />}
+   {account?.isActive ? <PlanActive accountId={account?.id} /> : <PlanInactive />}
    <h5 className={`title is-5 ${classes.boxTitle}`}>Payment Method</h5>
-   {paymentMethod ? (
+   {paymentMethod && account?.isActive ? (
     <div>
      <span className="has-text-weight-semibold is-size-5">{`${paymentMethod?.brand
       .charAt(0)

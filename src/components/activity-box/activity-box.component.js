@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { useSelector } from 'react-redux';
-
 import useStyles from './activity-box.style';
 
 import moment from 'moment';
+import { useGetAccounts, useGetActivity } from '../../hooks/queries';
 
 const NoActivity = () => {
  const classes = useStyles();
@@ -20,7 +19,9 @@ const NoActivity = () => {
 const ActivityBox = (props) => {
  const classes = useStyles(props);
 
- const activity = useSelector((state) => state.account.activity);
+ const { data: account } = useGetAccounts();
+
+ const { data: activity = [] } = useGetActivity({ accountId: account?.id });
 
  return activity.length === 0 ? (
   <NoActivity />

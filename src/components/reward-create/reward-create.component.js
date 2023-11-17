@@ -3,13 +3,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import PageHeader from '@components/page-header/page-header.component';
-import { create as createFn, update as updateFn } from '@mutations/rewards';
-import { toast } from 'react-toastify';
 import { useGetAccounts, useGetRewards } from '@hooks/queries';
-import { useMutation } from 'react-query';
+import { useCreateReward } from '@hooks/mutations';
+import { useUpdateReward } from '../../hooks/mutations';
 
 const schema = yup.object().shape({
  isActive: yup.boolean().required(),
@@ -21,35 +20,15 @@ const schema = yup.object().shape({
 const RewardCreate = () => {
  const { rewardId } = useParams();
 
- const navigate = useNavigate();
+ const { data: account } = useGetAccounts();
 
- const getAccounts = useGetAccounts();
-
- const accountId = getAccounts.data?.[0]?.id;
+ const accountId = account?.id;
 
  const getRewards = useGetRewards({ accountId });
 
- const { mutate: create, isLoading: isLoadingCreate } = useMutation(
-  (rewardData) => createFn({ data: rewardData }),
-  {
-   onSuccess: () => {
-    getRewards.refetch();
-    toast.success('Reward created');
-    navigate('/dashboard/rewards');
-   },
-  },
- );
+ const { mutate: create, isLoading: isLoadingCreate } = useCreateReward();
 
- const { mutate: update, isLoading: isLoadingUpdate } = useMutation(
-  (rewardData) => updateFn({ data: rewardData, rewardId }),
-  {
-   onSuccess: () => {
-    getRewards.refetch();
-    toast.success('Reward updated');
-    navigate('/dashboard/rewards');
-   },
-  },
- );
+ const { mutate: update, isLoading: isLoadingUpdate } = useUpdateReward();
 
  const isLoading = isLoadingCreate || isLoadingUpdate;
 
@@ -78,7 +57,7 @@ const RewardCreate = () => {
    accountId,
   };
 
-  reward ? update(rewardData) : create(rewardData);
+  reward ? update({ data: rewardData, rewardId: reward.id }) : create(rewardData);
  };
 
  return (
@@ -136,7 +115,14 @@ const RewardCreate = () => {
      </div>
      <div className="field">
       <label className="checkbox">
-       <input ref={register} className="mr-2" defaultValue name="isActive" type="checkbox" />
+       <input
+        ref={register}
+        className="mr-2"
+        defaultValue
+        name="isActive"
+        type="checkbox"
+        disabled={!account?.isActive}
+       />
        Activate
       </label>
       {errors.isActive && <p className="help is-danger">{errors.isActive?.message}</p>}
